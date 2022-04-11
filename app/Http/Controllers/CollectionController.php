@@ -31,7 +31,11 @@ class CollectionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'collection_id' => 'required|max:255',
+            'title' => 'required|max:255',
+            'caption' => 'required'
+        ]);
     }
 
     /**
@@ -54,7 +58,11 @@ class CollectionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->validate([
+            'collection_id' => 'required|max:255',
+            'title' => 'required|max:255',
+            'caption' => 'required'
+        ]);
     }
 
     /**
