@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\QuoteFunfactRepository;
+use App\Repositories\TagRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -10,8 +11,10 @@ use Illuminate\Support\Str;
 class QuoteFunfactController extends Controller
 {
     protected $quoteFunfactRepository;
-    public function __construct(QuoteFunfactRepository $quoteFunfactRepository) {
+    protected $tagRepository;
+    public function __construct(QuoteFunfactRepository $quoteFunfactRepository,  TagRepository $tagRepository) {
         $this->quoteFunfactRepository = $quoteFunfactRepository;
+        $this->tagRepository = $tagRepository;
     }
     /**
      * Display a listing of the resource.
@@ -35,6 +38,7 @@ class QuoteFunfactController extends Controller
      */
     public function create()
     {
+        $data['tags'] = $this->tagRepository->all();
         return view('admin.quote-funfact.create');
     }
 
