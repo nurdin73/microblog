@@ -83,10 +83,6 @@ class QuoteFunfactController extends Controller
      */
     public function show(Request $request, $id)
     {
-        if($request->acceptsJson()) {
-            $quote_funfact = $this->quoteFunfactRepository->get($id);
-            return response()->json($quote_funfact);
-        }
         $data['qf'] = $this->quoteFunfactRepository->get($id);
         return view('admin.quote-funfact.detail', $data);
     }
