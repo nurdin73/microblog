@@ -17,7 +17,9 @@ class CollectionFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'collection_id' => $this->faker->randomNumber(),
+            'title' => $this->faker->word,
+            'caption' => $this->faker->text,
         ];
     }
 }

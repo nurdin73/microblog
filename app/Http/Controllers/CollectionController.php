@@ -20,7 +20,13 @@ class CollectionController extends Controller
      */
     public function index()
     {
-        return view('admin.collection.index');
+        $data['collections'] = $this->collectionRepository->all();
+        return view('admin.collection.index', $data);
+    }
+
+    public function collections()
+    {
+        return $this->collectionRepository->all(true);
     }
 
     /**
@@ -36,6 +42,9 @@ class CollectionController extends Controller
             'title' => 'required|max:255',
             'caption' => 'required'
         ]);
+
+        $add = $this->collectionRepository->add($data);
+        return redirect()->route('admin.collection.index')->with('success', 'Collection added successfully');
     }
 
     /**
@@ -46,7 +55,7 @@ class CollectionController extends Controller
      */
     public function show($id)
     {
-        //
+        return $this->collectionRepository->get($id);
     }
 
     /**
@@ -63,6 +72,9 @@ class CollectionController extends Controller
             'title' => 'required|max:255',
             'caption' => 'required'
         ]);
+
+        $update = $this->collectionRepository->update($id, $data);
+        return redirect()->route('admin.collection.index')->with('success', 'Collection updated successfully');
     }
 
     /**
@@ -73,6 +85,7 @@ class CollectionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete = $this->collectionRepository->delete($id);
+        return redirect()->back()->with('success', 'Collection deleted successfully');
     }
 }

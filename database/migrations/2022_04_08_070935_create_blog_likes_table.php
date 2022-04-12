@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('blog_id')->constrained('blogs')->cascadeOnDelete();
             $table->string('shopify_id');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

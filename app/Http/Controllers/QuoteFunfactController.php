@@ -31,6 +31,11 @@ class QuoteFunfactController extends Controller
         return view('admin.quote-funfact.index', $data);
     }
 
+    public function getRandomQuotesFunfacts()
+    {
+        return $this->quoteFunfactRepository->random();
+    }
+
     /**
      * Show the form for creating a new resource.
      *

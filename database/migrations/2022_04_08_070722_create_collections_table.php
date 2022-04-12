@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('collection_id');
             $table->string('title');
             $table->text('caption');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

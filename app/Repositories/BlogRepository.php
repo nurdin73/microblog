@@ -20,13 +20,19 @@ class BlogRepository
     return $blogs;
   }
 
-  public function get($id, $status = '')
+  public function get($id, $status = '', $user_id = '')
   {
     $blog = Blog::where('id', $id);
     if($status != '') {
       $blog = $blog->where('status', $status);
     }
     $blog = $blog->firstOrFail();
+    return $blog;
+  }
+
+  public function detail($id, $user_id)
+  {
+    $blog = Blog::with(['tags', 'photos'])->where('id', $id)->where('status', 'published')->firstOrFail();
     return $blog;
   }
 
@@ -59,6 +65,20 @@ class BlogRepository
   {
     $blog = Blog::findOrFail($id);
     $blog->delete();
+    return $blog;
+  }
+
+  public function syncLikeUnlike(Int $blog_id, String $shopify_id)
+  {
+    $blog = Blog::findOrFail($blog_id);
+    $check = $blog->likes()->where('shopify_id', $shopify_id)->first();
+    if($check) {
+      $blog->likes()->where('shopify_id', $shopify_id)->update([
+        'status' => false
+      ]);
+    } else {
+      $blog->likes()->create(['shopify_id' => $shopify_id]);
+    }
     return $blog;
   }
 }

@@ -41,6 +41,12 @@ class QuoteFunfactRepository
     return $quote_funfact;
   }
 
+  public function random($limit = 10)
+  {
+    $quote_funfacts = QuoteFunfact::select('*')->with('tags')->where('status', 'published')->orderByRaw("RAND()")->limit($limit)->get();
+    return $quote_funfacts;
+  }
+
   public function update(Array $data, $id)
   {
     $quote_funfact = QuoteFunfact::findOrFail($id);

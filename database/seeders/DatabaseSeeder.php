@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         \App\Models\BlogTag::factory(10)->create();
         \App\Models\QuoteFunfact::factory(10)->create();
         \App\Models\QuoteFunfactTag::factory(10)->create();
+        \App\Models\Collection::factory(10)->create();
     }
 }
