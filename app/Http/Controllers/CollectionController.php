@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CollectionResource;
 use App\Repositories\CollectionRepository;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,8 @@ class CollectionController extends Controller
 
     public function collections()
     {
-        return $this->collectionRepository->all(true);
+        $data = $this->collectionRepository->all(true);
+        return response(CollectionResource::collection($data), 200);
     }
 
     /**

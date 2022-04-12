@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BlogCollection;
+use App\Http\Resources\BlogResource;
 use App\Repositories\BlogRepository;
 use Illuminate\Http\Request;
 
@@ -19,8 +21,10 @@ class ApiBlogController extends Controller
         $limit = request()->query('limit', 10);
         $by = request()->query('by', 'created_at');
         $order = request()->query('order', 'desc');
-        $data = $this->blogRepository->all($search, $limit, $by, $order, 'published');
-        return response()->json($data);
+        $aditional = request()->query('aditional', '');
+        $data = $this->blogRepository->all($search, $limit, $by, $order, 'published', $aditional);
+        // return response(BlogResource::collection($data), 200);
+        return new BlogCollection($data);
     }
     // for api
     public function detail($id)
@@ -29,7 +33,7 @@ class ApiBlogController extends Controller
         $data = $this->blogRepository->detail($id, $userId);
         return response()->json([
             'status' => 'success',
-            'data' => $data,
+            'data' => new BlogResource($data),
         ]);
     }
 

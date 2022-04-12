@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\QuoteFunfactCollection;
+use App\Http\Resources\QuoteResource;
 use App\Repositories\QuoteFunfactRepository;
 use App\Repositories\TagRepository;
 use Illuminate\Http\Request;
@@ -33,7 +35,8 @@ class QuoteFunfactController extends Controller
 
     public function getRandomQuotesFunfacts()
     {
-        return $this->quoteFunfactRepository->random();
+        $data = $this->quoteFunfactRepository->random(2);
+        return response(QuoteResource::collection($data), 200);
     }
 
     /**

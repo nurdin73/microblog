@@ -43,7 +43,8 @@ class QuoteFunfactRepository
 
   public function random($limit = 10)
   {
-    $quote_funfacts = QuoteFunfact::select('*')->with('tags')->where('status', 'published')->orderByRaw("RAND()")->limit($limit)->get();
+    $date = date('Y-m-d');
+    $quote_funfacts = QuoteFunfact::select('*')->with('tags')->where('status', 'published')->where('published_at', '=', $date)->orderByRaw("RAND()")->limit($limit)->get();
     return $quote_funfacts;
   }
 

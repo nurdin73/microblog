@@ -7,14 +7,26 @@ use App\Models\BlogTag;
 
 class BlogRepository
 {
-  public function all(String $search = '', Int $limit = 10, String $by = 'created_at', String $order = 'desc', String $status = '')
+  public function all(String $search = '', Int $limit = 10, String $by = 'created_at', String $order = 'desc', String $status = '', $additional_info = '')
   {
-    $blogs = Blog::select('*')->with('tags');
+    $blogs = Blog::select('*');
     if($search != '') {
       $blogs = $blogs->where('title', 'like', '%'.$search.'%');
     }
     if($status != '') {
       $blogs = $blogs->where('status', $status);
+    }
+    if($additional_info != '') {
+      $additional_info = explode(',', $additional_info);
+      foreach($additional_info as $info) {
+        if($info == 'likes') {
+          $blogs = $blogs->withCount(['likes' => function($query) {
+            $query->where('status', true);
+          }]);
+        } else {
+          $blogs = $blogs->with($info);
+        }
+      }
     }
     $blogs = $blogs->orderBy($by, $order)->paginate($limit);
     return $blogs;
@@ -32,7 +44,7 @@ class BlogRepository
 
   public function detail($id, $user_id)
   {
-    $blog = Blog::with(['tags', 'photos'])->where('id', $id)->where('status', 'published')->firstOrFail();
+    $blog = Blog::with(['tags', 'photos'])->withCount(['likes' => function($query) { $query->where('status', true); }])->where('id', $id)->where('status', 'published')->firstOrFail();
     return $blog;
   }
 
