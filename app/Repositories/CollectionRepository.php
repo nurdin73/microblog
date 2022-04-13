@@ -13,9 +13,9 @@ class CollectionRepository
   public function all(Bool $status = false)
   {
     if($status) {
-      return $this->collection->where('is_active', true)->paginate(10);
+      return $this->collection->where('is_active', true)->get();
     } else {
-      return $this->collection->paginate(10);
+      return $this->collection->get();
     }
   }
 

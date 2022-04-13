@@ -6,9 +6,13 @@ use App\Models\QuoteFunfactTag;
 
 class QuoteFunfactRepository
 {
+  protected $quote_funfact;
+  public function __construct(QuoteFunfact $quote_funfact) {
+    $this->quote_funfact = $quote_funfact;
+  }
   public function all(String $search = '', Int $limit = 10, String $by = 'created_at', String $order = 'desc')
   {
-    $quote_funfacts = QuoteFunfact::select('*')->with('tags');
+    $quote_funfacts = $this->quote_funfact->select('*')->with('tags');
     if($search != '') {
       $quote_funfacts = $quote_funfacts->where('title', 'like', '%'.$search.'%');
     }
@@ -18,7 +22,7 @@ class QuoteFunfactRepository
 
   public function add(Array $data)
   {
-    $quote_funfact = QuoteFunfact::updateOrCreate($data);
+    $quote_funfact = $this->quote_funfact->updateOrCreate($data);
     return $quote_funfact;
   }
 
@@ -33,7 +37,7 @@ class QuoteFunfactRepository
 
   public function get($id, $status = '')
   {
-    $quote_funfact = QuoteFunfact::where('id', $id);
+    $quote_funfact = $this->quote_funfact->where('id', $id);
     if($status != '') {
       $quote_funfact = $quote_funfact->where('status', $status);
     }
@@ -44,20 +48,20 @@ class QuoteFunfactRepository
   public function random($limit = 10)
   {
     $date = date('Y-m-d');
-    $quote_funfacts = QuoteFunfact::select('*')->with('tags')->where('status', 'published')->where('published_at', '=', $date)->orderByRaw("RAND()")->limit($limit)->get();
+    $quote_funfacts = $this->quote_funfact->select('*')->with('tags')->where('status', 'published')->where('published_at', '=', $date)->orderByRaw("RAND()")->limit($limit)->get();
     return $quote_funfacts;
   }
 
   public function update(Array $data, $id)
   {
-    $quote_funfact = QuoteFunfact::findOrFail($id);
+    $quote_funfact = $this->quote_funfact->findOrFail($id);
     $quote_funfact->update($data);
     return $quote_funfact;
   }
   
   public function delete($id)
   {
-    $quote_funfact = QuoteFunfact::findOrFail($id);
+    $quote_funfact = $this->quote_funfact->findOrFail($id);
     $quote_funfact->delete();
     return $quote_funfact;
   }

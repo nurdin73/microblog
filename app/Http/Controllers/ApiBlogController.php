@@ -31,10 +31,8 @@ class ApiBlogController extends Controller
     {
         $userId = request()->query('userKey', '');
         $data = $this->blogRepository->detail($id, $userId);
-        return response()->json([
-            'status' => 'success',
-            'data' => new BlogResource($data),
-        ]);
+        if(!$data) return response(['message' => 'Blog not found'], 404);
+        return response(new BlogResource($data));
     }
 
     public function likeUnlike(Request $request)

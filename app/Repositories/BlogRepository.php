@@ -4,6 +4,7 @@ namespace App\Repositories;
 use App\Models\Blog;
 use App\Models\BlogPhoto;
 use App\Models\BlogTag;
+use Illuminate\Support\Facades\Log;
 
 class BlogRepository
 {
@@ -32,7 +33,7 @@ class BlogRepository
     return $blogs;
   }
 
-  public function get($id, $status = '', $user_id = '')
+  public function get($id, $status = '')
   {
     $blog = Blog::where('id', $id);
     if($status != '') {
@@ -44,7 +45,12 @@ class BlogRepository
 
   public function detail($id, $user_id)
   {
-    $blog = Blog::with(['tags', 'photos'])->withCount(['likes' => function($query) { $query->where('status', true); }])->where('id', $id)->where('status', 'published')->firstOrFail();
+    $blog = Blog::with(['tags', 'photos'])->withCount(['likes' => function($query) { $query->where('status', true); }])->where('id', $id)->where('status', 'published')->first();
+    if(!$blog) return false;
+    if($user_id != '') {
+      Log::info("masuk sini");
+      $blog->setRelation('likes', $blog->likes()->where('shopify_id', $user_id)->first());
+    }
     return $blog;
   }
 
