@@ -40,7 +40,7 @@ class TagController extends Controller
         ]);
         $data['slug'] = Str::slug($data['name']);
         $store = $this->tagRepository->add($data);
-        return redirect()->route('admin.tags.index')->with('success', 'Tag berhasil ditambahkan');
+        return redirect()->route('admin.master.tags.index')->with('success', 'Tag berhasil ditambahkan');
     }
 
     /**
@@ -69,7 +69,7 @@ class TagController extends Controller
         ]);
         $data['slug'] = Str::slug($data['name']);
         $update = $this->tagRepository->update($id, $data);
-        return redirect()->route('admin.tags.index')->with('success', 'Tag berhasil diubah');
+        return redirect()->route('admin.master.tags.index')->with('success', 'Tag berhasil diubah');
     }
 
     /**
@@ -81,6 +81,6 @@ class TagController extends Controller
     public function destroy($id)
     {
         $delete = $this->tagRepository->delete($id);
-        return redirect()->route('admin.tags.index')->with('success', 'Tag berhasil dihapus');
+        return redirect()->route('admin.master.tags.index')->with('success', 'Tag berhasil dihapus');
     }
 }

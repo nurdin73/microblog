@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>detail</title>
-</head>
-<body>
-  <h1>{{ $qf->title }}</h1>
-  <p>{{ $qf->content }}</p>
-</body>
-</html>
+@extends('admin.template.main')
+@section('title', 'Detail Quote Funfact')
+@section('content')
+  <div class="container px-6 mx-auto grid">
+    <h2
+      class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
+    >
+      Blank
+    </h2>
+  </div>    
+@endsection

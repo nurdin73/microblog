@@ -33,6 +33,10 @@ class BlogController extends Controller
         $by = request()->query('by', 'created_at');
         $order = request()->query('order', 'desc');
         $data['blogs'] = $this->blogRepository->all($search, $limit, $by, $order);
+        $data['search'] = $search;
+        $data['limit'] = $limit;
+        $data['by'] = $by;
+        $data['order'] = $order;
         return view('admin.blog.index', $data);
     }
 

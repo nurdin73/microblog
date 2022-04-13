@@ -1,21 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Detail</title>
-</head>
-<body>
-  <h1>{{ $blog->title }}</h1>
-  <p>{!! $blog->content !!}</p>
-  <p>{{ $blog->status }}</p>
-  @foreach ($blog->tags as $tag)
-    <span>{{ $tag->name }}</span>,
-  @endforeach
-
-  @foreach ($blog->photos as $photo)
-    <img src="{{ asset($photo->src) }}" alt="{{ $photo->src }}">
-  @endforeach
-</body>
-</html>
+@extends('admin.template.main')
+@section('title', 'Detail Blog')
+@section('content')
+  <div class="container px-6 mx-auto grid">
+    <h2
+      class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
+    >
+      Blank
+    </h2>
+  </div>    
+@endsection

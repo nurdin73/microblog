@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\QuoteFunfactController;
 use App\Http\Controllers\TagController;
@@ -29,5 +30,8 @@ Route::group(['middleware' => 'auth', 'as' => 'admin.'], function() {
     Route::get('/', HomeController::class)->name('home');
     Route::resource('blogs', BlogController::class);
     Route::resource('quote-funfacts', QuoteFunfactController::class);
-    Route::resource('tags', TagController::class)->except(['create', 'edit']);
+    Route::resource('collections', CollectionController::class)->except(['create', 'edit']);
+    Route::group(['prefix' => 'master', 'as' => 'master.'], function() {
+        Route::resource('tags', TagController::class)->except(['create', 'edit']);
+    });
 });
