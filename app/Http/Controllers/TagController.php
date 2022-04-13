@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\TagRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class TagController extends Controller
 {
@@ -18,7 +19,12 @@ class TagController extends Controller
      */
     public function index()
     {
-        return view('admin.master.tags');
+        $search = request()->query('search', '');
+        $limit = request()->query('limit', 10);
+        $by = request()->query('by', 'created_at');
+        $order = request()->query('order', 'desc');
+        $data['tags'] = $this->tagRepository->paginate($search, $limit, $by, $order);
+        return view('admin.master.tags', $data);
     }
 
     /**
@@ -29,7 +35,12 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|max:255',
+        ]);
+        $data['slug'] = Str::slug($data['name']);
+        $store = $this->tagRepository->add($data);
+        return redirect()->route('admin.tags.index')->with('success', 'Tag berhasil ditambahkan');
     }
 
     /**
@@ -40,7 +51,7 @@ class TagController extends Controller
      */
     public function show($id)
     {
-        //
+        return $this->tagRepository->detail($id);
     }
 
 
@@ -53,7 +64,12 @@ class TagController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|max:255',
+        ]);
+        $data['slug'] = Str::slug($data['name']);
+        $update = $this->tagRepository->update($id, $data);
+        return redirect()->route('admin.tags.index')->with('success', 'Tag berhasil diubah');
     }
 
     /**
@@ -64,6 +80,7 @@ class TagController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete = $this->tagRepository->delete($id);
+        return redirect()->route('admin.tags.index')->with('success', 'Tag berhasil dihapus');
     }
 }
