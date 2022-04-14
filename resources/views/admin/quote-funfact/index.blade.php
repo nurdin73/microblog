@@ -101,7 +101,7 @@
                   <a href="{{ route('admin.quote-funfacts.edit', ['quote_funfact' => $qf->id]) }}" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                     Edit
                   </a>
-                  <form action="{{ route('admin.quote-funfacts.destroy', $qf->id) }}" method="post" id="deleteItem">
+                  <form action="{{ route('admin.quote-funfacts.destroy', $qf->id) }}" method="post" class="deleteItem">
                     @csrf
                     @method('delete')
                     <button type="submit" class="px-3 ml-2 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-md active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red">Delete</button>
@@ -156,7 +156,7 @@
       form.submit();
     }
 
-    $('#deleteItem').on('submit', function(e) {
+    $('.deleteItem').on('submit', function(e) {
       e.preventDefault();
       var form = this;
       Swal.fire({

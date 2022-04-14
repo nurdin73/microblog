@@ -10,7 +10,8 @@ class CollectionController extends Controller
 {
     protected $collectionRepository;
 
-    public function __construct(CollectionRepository $collectionRepository) {
+    public function __construct(CollectionRepository $collectionRepository)
+    {
         $this->collectionRepository = $collectionRepository;
     }
 
@@ -51,8 +52,12 @@ class CollectionController extends Controller
             'caption' => 'required'
         ]);
 
-        $add = $this->collectionRepository->add($data);
-        return redirect()->route('admin.collection.index')->with('success', 'Collection added successfully');
+        try {
+            $add = $this->collectionRepository->add($data);
+            return redirect()->route('admin.collections.index')->with('success', 'Collection added successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -87,8 +92,12 @@ class CollectionController extends Controller
             'caption' => 'required'
         ]);
 
-        $update = $this->collectionRepository->update($id, $data);
-        return redirect()->route('admin.collection.index')->with('success', 'Collection updated successfully');
+        try {
+            $update = $this->collectionRepository->update($id, $data);
+            return redirect()->route('admin.collections.index')->with('success', 'Collection updated successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Collection update failed');
+        }
     }
 
     /**

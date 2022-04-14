@@ -20,6 +20,16 @@
         </div>
       </div>
     @endif
+    @if (session('error'))
+      <div class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-red-100 bg-red-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-red">
+        <div class="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{ session('error') }}</span>
+        </div>
+      </div>
+    @endif
     <div class="flex justify-between align-center mb-4">
       <label class="block text-sm w-24">
         <select onchange="limitItem()" id="limit" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
@@ -67,7 +77,8 @@
                   {{ $loop->iteration }}
                 </td>
                 <td class="px-4 py-3 text-sm ">
-                  <a title="{{ $c->title }}" href="{{ route('admin.quote-funfacts.show', ['quote_funfact' => $c->id]) }}" class="text-purple-600 dark:text-gray-200 hover:underline">{{ \Str::limit($c->title, 60) }}</a>
+                  <span class="text-purple-600 dark:text-gray-200 block">{{ \Str::limit($c->title, 60) }}</span>
+                  <small class="text-purple-600 dark:text-gray-200 block text-xs">{{ \Str::limit($c->caption, 60) }}</small>
                 </td>
                 <td class="px-4 py-3 text-xs text-center">
                   @if($c->is_active == 1)
@@ -87,7 +98,7 @@
                   <a href="{{ route('admin.collections.edit', ['collection' => $c->id]) }}" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                     Edit
                   </a>
-                  <form action="{{ route('admin.collections.destroy', $c->id) }}" method="post" id="deleteItem">
+                  <form action="{{ route('admin.collections.destroy', $c->id) }}" method="post" class="deleteItem">
                     @csrf
                     @method('delete')
                     <button type="submit" class="px-3 ml-2 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-md active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red">Delete</button>
@@ -132,26 +143,66 @@
             class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
             data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body relative p-4">
-          
-        </div>
-        <div class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
-          <button type="button"
-            class="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
-            data-bs-dismiss="modal">
-            Close
-          </button>
-          <button type="button"
-            class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1">
-            Save changes
-          </button>
-        </div>
+        <form action="{{ route('admin.collections.store') }}" method="post">
+          @csrf
+          <div class="modal-body relative p-4">
+            <label class="block text-sm mb-2">
+              <span class="text-gray-700 dark:text-gray-400">Collection</span>
+              <select
+                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                name="collection_id"
+              >
+                <option value="">Choose</option>
+                <option value="123">Collection</option>
+              </select>
+              @error('collection_id')
+                <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
+              @enderror
+            </label>
+            <label class="block text-sm mb-2">
+              <span class="text-gray-700 dark:text-gray-400">Title</span>
+              <input
+                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                placeholder="Jane Doe"
+                name="title"
+                value="{{ old('title') }}"
+              />
+              @error('title')
+                <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
+              @enderror
+            </label>
+            <label class="block text-sm">
+              <span class="text-gray-700 dark:text-gray-400">Caption</span>
+              <input
+                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                placeholder="Jane Doe"
+                name="caption"
+                value="{{ old('caption') }}"
+              />
+              @error('caption')
+                <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
+              @enderror
+            </label>
+          </div>
+          <div class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+            <button type="button"
+              class="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+              data-bs-dismiss="modal">
+              Close
+            </button>
+            <button type="submit"
+              class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1">
+              Save changes
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 @endsection
 
 @section('js')
+
   <script>
     function limitItem() {  
       var limit = $('#limit').val();
@@ -173,7 +224,7 @@
       form.submit();
     }
 
-    $('#deleteItem').on('submit', function(e) {
+    $('.deleteItem').on('submit', function(e) {
       e.preventDefault();
       var form = this;
       Swal.fire({

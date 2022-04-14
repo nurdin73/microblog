@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories;
 
 use App\Models\Collection;
@@ -6,15 +7,16 @@ use App\Models\Collection;
 class CollectionRepository
 {
   protected $collection;
-  public function __construct(Collection $collection) {
+  public function __construct(Collection $collection)
+  {
     $this->collection = $collection;
   }
 
   public function paginate(String $search = '', Int $limit = 10, String $by = 'created_at', String $order = 'desc')
   {
     $collections = $this->collection->select('*');
-    if($search != '') {
-      $collections = $collections->where('collection_id', 'like', '%'.$search.'%');
+    if ($search != '') {
+      $collections = $collections->where('collection_id', 'like', '%' . $search . '%');
     }
     $collections = $collections->orderBy($by, $order)->paginate($limit);
     return $collections;
@@ -22,7 +24,7 @@ class CollectionRepository
 
   public function all(Bool $status = false)
   {
-    if($status) {
+    if ($status) {
       return $this->collection->where('is_active', true)->get();
     } else {
       return $this->collection->get();
@@ -34,12 +36,12 @@ class CollectionRepository
     return $this->collection->findOrFail($id);
   }
 
-  public function add(Array $data)
+  public function add(array $data)
   {
     return $this->collection->updateOrCreate($data);
   }
 
-  public function update($id, Array $data)
+  public function update($id, array $data)
   {
     return $this->get($id)->update($data);
   }
@@ -47,5 +49,10 @@ class CollectionRepository
   public function delete($id)
   {
     return $this->get($id)->delete();
+  }
+
+  public function total()
+  {
+    return $this->collection->count();
   }
 }

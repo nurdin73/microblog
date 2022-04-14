@@ -9,7 +9,8 @@ use Illuminate\Support\Str;
 class TagController extends Controller
 {
     protected $tagRepository;
-    public function __construct(TagRepository $tagRepository) {
+    public function __construct(TagRepository $tagRepository)
+    {
         $this->tagRepository = $tagRepository;
     }
     /**
@@ -24,6 +25,8 @@ class TagController extends Controller
         $by = request()->query('by', 'created_at');
         $order = request()->query('order', 'desc');
         $data['tags'] = $this->tagRepository->paginate($search, $limit, $by, $order);
+        $data['search'] = $search;
+        $data['limit'] = $limit;
         return view('admin.master.tags', $data);
     }
 
@@ -40,7 +43,7 @@ class TagController extends Controller
         ]);
         $data['slug'] = Str::slug($data['name']);
         $store = $this->tagRepository->add($data);
-        return redirect()->route('admin.master.tags.index')->with('success', 'Tag berhasil ditambahkan');
+        return redirect()->route('admin.master.tags.index')->with('success', 'Create tags successfully');
     }
 
     /**
@@ -69,7 +72,7 @@ class TagController extends Controller
         ]);
         $data['slug'] = Str::slug($data['name']);
         $update = $this->tagRepository->update($id, $data);
-        return redirect()->route('admin.master.tags.index')->with('success', 'Tag berhasil diubah');
+        return redirect()->route('admin.master.tags.index')->with('success', "Tag Update successfully");
     }
 
     /**

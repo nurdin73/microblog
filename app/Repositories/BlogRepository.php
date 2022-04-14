@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories;
 
 use App\Models\Blog;
@@ -13,17 +14,17 @@ class BlogRepository
   public function all(String $search = '', Int $limit = 10, String $by = 'created_at', String $order = 'desc', String $status = '', $additional_info = '')
   {
     $blogs = Blog::select('*');
-    if($search != '') {
-      $blogs = $blogs->where('title', 'like', '%'.$search.'%');
+    if ($search != '') {
+      $blogs = $blogs->where('title', 'like', '%' . $search . '%');
     }
-    if($status != '') {
+    if ($status != '') {
       $blogs = $blogs->where('status', $status);
     }
-    if($additional_info != '') {
+    if ($additional_info != '') {
       $additional_info = explode(',', $additional_info);
-      foreach($additional_info as $info) {
-        if($info == 'likes') {
-          $blogs = $blogs->withCount(['likes' => function($query) {
+      foreach ($additional_info as $info) {
+        if ($info == 'likes') {
+          $blogs = $blogs->withCount(['likes' => function ($query) {
             $query->where('status', true);
           }]);
         } else {
@@ -38,7 +39,7 @@ class BlogRepository
   public function get($id, $status = '')
   {
     $blog = Blog::where('id', $id)->with(['tags', 'photos']);
-    if($status != '') {
+    if ($status != '') {
       $blog = $blog->where('status', $status);
     }
     $blog = $blog->firstOrFail();
@@ -47,16 +48,18 @@ class BlogRepository
 
   public function detail($id, $user_id)
   {
-    $blog = Blog::with(['tags', 'photos'])->withCount(['likes' => function($query) { $query->where('status', true); }])->where('id', $id)->where('status', 'published')->first();
-    if(!$blog) return false;
-    if($user_id != '') {
+    $blog = Blog::with(['tags', 'photos'])->withCount(['likes' => function ($query) {
+      $query->where('status', true);
+    }])->where('id', $id)->where('status', 'published')->first();
+    if (!$blog) return false;
+    if ($user_id != '') {
       Log::info("masuk sini");
       $blog->setRelation('likes', $blog->likes()->where('shopify_id', $user_id)->first());
     }
     return $blog;
   }
 
-  public function add(Array $data)
+  public function add(array $data)
   {
     $blog = Blog::updateOrCreate($data);
     return $blog;
@@ -85,7 +88,7 @@ class BlogRepository
     return $tag;
   }
 
-  public function update(Array $data, $id)
+  public function update(array $data, $id)
   {
     $blog = Blog::findOrFail($id);
     $blog->update($data);
@@ -103,7 +106,7 @@ class BlogRepository
   {
     $blog = Blog::findOrFail($blog_id);
     $check = $blog->likes()->where('shopify_id', $shopify_id)->first();
-    if($check) {
+    if ($check) {
       $blog->likes()->where('shopify_id', $shopify_id)->update([
         'status' => false
       ]);
@@ -111,5 +114,10 @@ class BlogRepository
       $blog->likes()->create(['shopify_id' => $shopify_id]);
     }
     return $blog;
+  }
+
+  public function total()
+  {
+    return Blog::count();
   }
 }
