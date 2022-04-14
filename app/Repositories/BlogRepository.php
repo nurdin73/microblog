@@ -4,10 +4,12 @@ namespace App\Repositories;
 use App\Models\Blog;
 use App\Models\BlogPhoto;
 use App\Models\BlogTag;
+use App\Traits\ImageOptimize;
 use Illuminate\Support\Facades\Log;
 
 class BlogRepository
 {
+  use ImageOptimize;
   public function all(String $search = '', Int $limit = 10, String $by = 'created_at', String $order = 'desc', String $status = '', $additional_info = '')
   {
     $blogs = Blog::select('*');
@@ -35,7 +37,7 @@ class BlogRepository
 
   public function get($id, $status = '')
   {
-    $blog = Blog::where('id', $id);
+    $blog = Blog::where('id', $id)->with(['tags', 'photos']);
     if($status != '') {
       $blog = $blog->where('status', $status);
     }
@@ -62,8 +64,19 @@ class BlogRepository
 
   public function syncPhoto(String $src, Int $blog_id)
   {
-    $photo = BlogPhoto::updateOrCreate(['src' => $src, 'blog_id' => $blog_id]);
-    return $photo;
+    $blog_photo = new BlogPhoto();
+    $blog_photo->src = $src;
+    $blog_photo->blog_id = $blog_id;
+    $blog_photo->save();
+  }
+
+  public function clearPhoto(Int $blog_id)
+  {
+    $checks = BlogPhoto::where('blog_id', $blog_id)->get();
+    foreach ($checks as $check) {
+      $this->deleteImage($check->src);
+      $check->delete();
+    }
   }
 
   public function syncTag(Int $tag_id, Int $blog_id)

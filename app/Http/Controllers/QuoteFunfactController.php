@@ -30,6 +30,8 @@ class QuoteFunfactController extends Controller
         $by = request()->query('by', 'created_at');
         $order = request()->query('order', 'desc');
         $data['quote_funfacts'] = $this->quoteFunfactRepository->all($search, $limit, $by, $order);
+        $data['search'] = $search;
+        $data['limit'] = $limit;
         return view('admin.quote-funfact.index', $data);
     }
 

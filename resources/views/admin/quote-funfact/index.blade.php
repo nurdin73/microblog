@@ -2,10 +2,172 @@
 @section('title', 'Quote Funfacts')
 @section('content')
   <div class="container px-6 mx-auto grid">
-    <h2
-      class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
-    >
-      Quotes Funfacts
-    </h2>
+    <div class="flex justify-between align-center my-6">
+      <h2 class=" text-2xl font-semibold text-gray-700 dark:text-gray-200">
+        Quote Funfacts
+      </h2>
+      <a href="{{ route('admin.quote-funfacts.create') }}" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">New Quote/Funfact</a>
+    </div>
+    @if (session('success'))
+      <div class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
+        <div class="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{ session('success') }}</span>
+        </div>
+      </div>
+    @endif
+    <div class="flex justify-between align-center mb-4">
+      <label class="block text-sm w-24">
+        <select onchange="limitItem()" id="limit" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+          <option value="10" @if($limit == 10) selected @endif>10</option>
+          <option value="25" @if($limit == 25) selected @endif>25</option>
+          <option value="50" @if($limit == 50) selected @endif>50</option>
+          <option value="100" @if($limit == 100) selected @endif>100</option>
+        </select>
+      </label>
+      <form method="GET" action="{{ route('admin.quote-funfacts.index') }}">
+        <div class="relative text-gray-500 focus-within:text-purple-600">
+          <input
+            class="block w-full pr-20 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+            placeholder="Search by title"
+            name="search"
+            id="search"
+            value="{{ $search }}"
+          />
+          <input type="hidden" name="limit" value="{{ $limit }}">
+          {{-- <input type="hidden" name="page" value="{{ request()->page }}"> --}}
+          <button type="submit" class="absolute inset-y-0 right-0 px-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-r-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+            Search
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
+      <div class="w-full overflow-x-auto">
+        <table class="w-full whitespace-no-wrap">
+          <thead>
+            <tr
+              class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+            >
+              <th class="px-4 py-3 text-center">No</th>
+              <th class="px-4 py-3">Title</th>
+              <th class="px-4 py-3 text-center">Type</th>
+              <th class="px-4 py-3 text-center">Status</th>
+              <th class="px-4 py-3 text-center">Created At</th>
+              <th class="px-4 py-3 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+            @forelse ($quote_funfacts as $qf)
+              <tr class="text-gray-700 dark:text-gray-400">
+                <td class="px-4 py-3 text-center">
+                  {{ $loop->iteration }}
+                </td>
+                <td class="px-4 py-3 text-sm ">
+                  <a title="{{ $qf->title }}" href="{{ route('admin.quote-funfacts.show', ['quote_funfact' => $qf->id]) }}" class="text-purple-600 dark:text-gray-200 hover:underline">{{ \Str::limit($qf->title, 60) }}</a>
+                </td>
+                <td class="px-4 py-3 text-xs text-center">
+                  @if($qf->type == 'quote')
+                    <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-700 dark:text-yellow-100">
+                      {{ $qf->type }}
+                    </span>
+                  @else
+                    <span class="px-2 py-1 font-semibold leading-tight text-blue-700 bg-blue-100 rounded-full dark:text-white dark:bg-blue-600">
+                      {{ $qf->type }}
+                    </span>
+                  @endif
+                </td>
+                <td class="px-4 py-3 text-xs text-center">
+                  @if($qf->status == 'published')
+                    <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                      {{ $qf->status }}
+                    </span>
+                  @else
+                    <span class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
+                      {{ $qf->status }}
+                    </span>
+                  @endif
+                </td>
+                <td class="px-4 py-3 text-sm text-center">
+                  {{ $qf->created_at->format('d F Y') }}
+                </td>
+                <td class="px-4 py-3 text-sm text-center flex align-center justify-center">
+                  <a href="{{ route('admin.quote-funfacts.edit', ['quote_funfact' => $qf->id]) }}" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                    Edit
+                  </a>
+                  <form action="{{ route('admin.quote-funfacts.destroy', $qf->id) }}" method="post" id="deleteItem">
+                    @csrf
+                    @method('delete')
+                    <button type="submit" class="px-3 ml-2 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-md active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            @empty
+              <tr class="text-gray-700 dark:text-gray-400">
+                <td class="px-4 py-3 text-center" colspan="5">
+                  No quote/funfact found
+                </td>
+              </tr>
+            @endforelse
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800"
+      >
+        <span class="flex items-center col-span-3">
+          Showing {{ $quote_funfacts->firstItem() }} - {{ $quote_funfacts->lastItem() }} of {{ $quote_funfacts->total() }}
+        </span>
+        <span class="col-span-2"></span>
+        <!-- Pagination -->
+        <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+          {{ $quote_funfacts->links() }}
+        </span>
+      </div>
+    </div>
   </div>    
+@endsection
+
+@section('js')
+  <script>
+    function limitItem() {  
+      var limit = $('#limit').val();
+      var search = $('#search').val();
+      const form = document.createElement('form');
+      form.method = 'GET';
+      form.action = '{{ route('admin.quote-funfacts.index') }}';
+      var input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'limit';
+      input.value = limit;
+      form.appendChild(input);
+      input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'search';
+      input.value = search;
+      form.appendChild(input);
+      document.body.appendChild(form);
+      form.submit();
+    }
+
+    $('#deleteItem').on('submit', function(e) {
+      e.preventDefault();
+      var form = this;
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    });
+  </script>
 @endsection

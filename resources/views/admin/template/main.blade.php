@@ -15,6 +15,7 @@
       defer
     ></script>
     <script src="{{ asset('assets/js/init-alpine.js') }}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
     @yield('css')
   </head>
   <body>
@@ -47,6 +48,9 @@
         </main>
       </div>
     </div>
+    @yield('modal')
+    <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     @yield('js')
   </body>

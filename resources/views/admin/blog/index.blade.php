@@ -8,9 +8,19 @@
       </h2>
       <a href="{{ route('admin.blogs.create') }}" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">New Blog</a>
     </div>
+    @if (session('success'))
+      <div class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
+        <div class="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{ session('success') }}</span>
+        </div>
+      </div>
+    @endif
     <div class="flex justify-between align-center mb-4">
       <label class="block text-sm w-24">
-        <select class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+        <select onchange="limitItem()" id="limit" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
           <option value="10" @if($limit == 10) selected @endif>10</option>
           <option value="25" @if($limit == 25) selected @endif>25</option>
           <option value="50" @if($limit == 50) selected @endif>50</option>
@@ -23,10 +33,11 @@
             class="block w-full pr-20 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
             placeholder="Search by title"
             name="search"
+            id="search"
             value="{{ $search }}"
           />
-          {{-- <input type="hidden" name="limit" value="{{ $limit }}">
-          <input type="hidden" name="page" value="{{ request()->page }}"> --}}
+          <input type="hidden" name="limit" value="{{ $limit }}">
+          {{-- <input type="hidden" name="page" value="{{ request()->page }}"> --}}
           <button type="submit" class="absolute inset-y-0 right-0 px-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-r-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
             Search
           </button>
@@ -74,7 +85,7 @@
                   <a href="{{ route('admin.blogs.edit', ['blog' => $b->id]) }}" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                     Edit
                   </a>
-                  <form action="{{ route('admin.blogs.destroy', $b->id) }}" method="post">
+                  <form action="{{ route('admin.blogs.destroy', $b->id) }}" method="post" id="deleteItem">
                     @csrf
                     @method('delete')
                     <button type="submit" class="px-3 ml-2 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-md active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red">Delete</button>
@@ -105,4 +116,46 @@
       </div>
     </div>
   </div>    
+@endsection
+
+@section('js')
+  <script>
+    function limitItem() {  
+      var limit = $('#limit').val();
+      var search = $('#search').val();
+      const form = document.createElement('form');
+      form.method = 'GET';
+      form.action = '{{ route('admin.blogs.index') }}';
+      var input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'limit';
+      input.value = limit;
+      form.appendChild(input);
+      input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'search';
+      input.value = search;
+      form.appendChild(input);
+      document.body.appendChild(form);
+      form.submit();
+    }
+
+    $('#deleteItem').on('submit', function(e) {
+      e.preventDefault();
+      var form = this;
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    });
+  </script>
 @endsection

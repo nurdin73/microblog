@@ -10,6 +10,16 @@ class CollectionRepository
     $this->collection = $collection;
   }
 
+  public function paginate(String $search = '', Int $limit = 10, String $by = 'created_at', String $order = 'desc')
+  {
+    $collections = $this->collection->select('*');
+    if($search != '') {
+      $collections = $collections->where('collection_id', 'like', '%'.$search.'%');
+    }
+    $collections = $collections->orderBy($by, $order)->paginate($limit);
+    return $collections;
+  }
+
   public function all(Bool $status = false)
   {
     if($status) {

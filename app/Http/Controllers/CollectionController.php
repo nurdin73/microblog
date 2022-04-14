@@ -21,7 +21,13 @@ class CollectionController extends Controller
      */
     public function index()
     {
-        $data['collections'] = $this->collectionRepository->all();
+        $search = request()->query('search', '');
+        $limit = request()->query('limit', 10);
+        $by = request()->query('by', 'created_at');
+        $order = request()->query('order', 'desc');
+        $data['collections'] = $this->collectionRepository->paginate($search, $limit, $by, $order);
+        $data['search'] = $search;
+        $data['limit'] = $limit;
         return view('admin.collection.index', $data);
     }
 
@@ -58,6 +64,12 @@ class CollectionController extends Controller
     public function show($id)
     {
         return $this->collectionRepository->get($id);
+    }
+
+    public function edit($id)
+    {
+        $data['collection'] = $this->collectionRepository->get($id);
+        return view('admin.collection.edit', $data);
     }
 
     /**

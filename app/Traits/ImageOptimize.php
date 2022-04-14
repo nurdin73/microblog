@@ -71,7 +71,7 @@ trait ImageOptimize
         if ($width != null && $height != null) {
             $img->resize($width, $height);
         }
-        $img->encode('jpg', 70);
+        $img->encode('jpg', 90);
         Storage::disk()->put($path . $filename, $img, 'public');
         // $storagePath = Storage::disk()->getDriver()->getAdapter()->getPathPrefix().$path.$filename;
         $storagePath = Storage::disk()->path($path . $filename);

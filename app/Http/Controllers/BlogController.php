@@ -72,7 +72,6 @@ class BlogController extends Controller
                 $photos = $request->file('photos');
                 foreach ($photos as $photo) {
                     $filename = $this->saveImage($photo, 'blog/');
-                    Log::info($filename);
                     if($filename) {
                         $this->blogRepository->syncPhoto($filename, $blog->id);
                     } else {
@@ -91,7 +90,7 @@ class BlogController extends Controller
             return redirect()->route('admin.blogs.index')->with('success', 'Blog created successfully');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('admin.blogs.index')->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
@@ -115,7 +114,9 @@ class BlogController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.blog.edit');
+        $data['tags'] = $this->tagRepository->all();
+        $data['blog'] = $this->blogRepository->get($id);
+        return view('admin.blog.edit', $data);
     }
 
     /**
@@ -127,7 +128,40 @@ class BlogController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $this->validate($request, [
+            'title' => 'required',
+            'content' => 'required',
+            'status' => 'required',
+        ]);
+        $data['slug'] = Str::slug($data['title']);
+        DB::beginTransaction();
+        try {
+            $blog = $this->blogRepository->update($data, $id);
+            if($request->hasFile('photos')) {
+                $photos = $request->file('photos');
+                $this->blogRepository->clearPhoto($blog->id);
+                foreach ($photos as $photo) {
+                    $filename = $this->saveImage($photo, 'blog/', 640, 320);
+                    if($filename) {
+                        $this->blogRepository->syncPhoto($filename, $blog->id);
+                    } else {
+                        DB::rollBack();
+                        return redirect()->back()->with('error', 'Failed to upload photo');
+                    }
+                }
+            }
+            if($request->has('tags')) {
+                $tags = $request->input('tags');
+                foreach ($tags as $tag) {
+                    $this->blogRepository->syncTag($tag, $blog->id);
+                }
+            }
+            DB::commit();
+            return redirect()->route('admin.blogs.index')->with('success', 'Blog update successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -138,6 +172,7 @@ class BlogController extends Controller
      */
     public function destroy($id)
     {
+        $this->blogRepository->clearPhoto($id);
         $delete = $this->blogRepository->delete($id);
         return redirect()->route('admin.blogs.index')->with('success', 'Blog deleted successfully');
     }
