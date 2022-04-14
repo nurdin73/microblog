@@ -14,7 +14,8 @@ class QuoteFunfactController extends Controller
 {
     protected $quoteFunfactRepository;
     protected $tagRepository;
-    public function __construct(QuoteFunfactRepository $quoteFunfactRepository,  TagRepository $tagRepository) {
+    public function __construct(QuoteFunfactRepository $quoteFunfactRepository,  TagRepository $tagRepository)
+    {
         $this->quoteFunfactRepository = $quoteFunfactRepository;
         $this->tagRepository = $tagRepository;
     }
@@ -49,7 +50,7 @@ class QuoteFunfactController extends Controller
     public function create()
     {
         $data['tags'] = $this->tagRepository->all();
-        return view('admin.quote-funfact.create');
+        return view('admin.quote-funfact.create', $data);
     }
 
     /**
@@ -62,18 +63,18 @@ class QuoteFunfactController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|max:255',
-            'type' => 'required|max:255',
+            'type' => 'required|in:quote,funfact',
             'content' => 'required',
-            'status' => 'required|max:255',
+            'status' => 'required|in:published,draft',
             'published_at' => 'required|date',
         ]);
         DB::beginTransaction();
         try {
             $data['slug'] = Str::slug($data['title']);
             $quote_funfact = $this->quoteFunfactRepository->add($data);
-            if($request->has('tags')) {
+            if ($request->has('tags')) {
                 $tags = $request->input('tags');
-                foreach($tags as $tag) {
+                foreach ($tags as $tag) {
                     $this->quoteFunfactRepository->syncTag($quote_funfact->id, $tag);
                 }
             }
@@ -106,6 +107,7 @@ class QuoteFunfactController extends Controller
     public function edit($id)
     {
         $data['qf'] = $this->quoteFunfactRepository->get($id);
+        $data['tags'] = $this->tagRepository->all();
         return view('admin.quote-funfact.edit', $data);
     }
 
@@ -129,9 +131,9 @@ class QuoteFunfactController extends Controller
         try {
             $data['slug'] = Str::slug($data['title']);
             $quote_funfact = $this->quoteFunfactRepository->update($data, $id);
-            if($request->has('tags')) {
+            if ($request->has('tags')) {
                 $tags = $request->input('tags');
-                foreach($tags as $tag) {
+                foreach ($tags as $tag) {
                     $this->quoteFunfactRepository->syncTag($quote_funfact->id, $tag);
                 }
             }
@@ -139,10 +141,7 @@ class QuoteFunfactController extends Controller
             return redirect()->route('admin.quote-funfacts.index')->with('success', 'Quote Funfact updated successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('admin.quote-funfacts.index')->with('error', 'Quote Funfact update failed.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->route('admin.quote-funfacts.index')->with('error', 'Quote Funfact update failed.');
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 

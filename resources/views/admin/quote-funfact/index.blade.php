@@ -55,6 +55,7 @@
               <th class="px-4 py-3">Title</th>
               <th class="px-4 py-3 text-center">Type</th>
               <th class="px-4 py-3 text-center">Status</th>
+              <th class="px-4 py-3 text-center">Published at</th>
               <th class="px-4 py-3 text-center">Created At</th>
               <th class="px-4 py-3 text-center">Actions</th>
             </tr>
@@ -66,7 +67,7 @@
                   {{ $loop->iteration }}
                 </td>
                 <td class="px-4 py-3 text-sm ">
-                  <a title="{{ $qf->title }}" href="{{ route('admin.quote-funfacts.show', ['quote_funfact' => $qf->id]) }}" class="text-purple-600 dark:text-gray-200 hover:underline">{{ \Str::limit($qf->title, 60) }}</a>
+                  <a title="{{ $qf->title }}" href="{{ route('admin.quote-funfacts.show', ['quote_funfact' => $qf->id]) }}" class="text-purple-600 dark:text-gray-200 hover:underline">{{ \Str::limit($qf->title, 30) }}</a>
                 </td>
                 <td class="px-4 py-3 text-xs text-center">
                   @if($qf->type == 'quote')
@@ -89,6 +90,9 @@
                       {{ $qf->status }}
                     </span>
                   @endif
+                </td>
+                <td class="px-4 py-3 text-sm text-center">
+                  {{ \Carbon\Carbon::parse($qf->published_at)->format('d F Y') }}
                 </td>
                 <td class="px-4 py-3 text-sm text-center">
                   {{ $qf->created_at->format('d F Y') }}
