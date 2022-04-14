@@ -22,7 +22,7 @@
           placeholder="system@system.com"
           name="email"
           type="email"
-          value="{{ old('email') }}"
+          value="system@system.com"
         />
         @error('email')
           <small class="text-xs italic text-gray-600">{{ $message }}</small>
@@ -35,6 +35,7 @@
           placeholder="***************"
           type="password"
           name="password"
+          value="password"
         />
         @error('password')
           <small class="text-xs text-gray-600 italic">{{ $message }}</small>
