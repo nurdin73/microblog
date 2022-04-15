@@ -35,8 +35,6 @@ Route::group(['middleware' => 'auth', 'as' => 'admin.'], function () {
     Route::group(['prefix' => 'master', 'as' => 'master.'], function () {
         Route::resource('tags', TagController::class)->except(['create', 'edit']);
     });
-
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/change-password', [ProfileController::class, 'changePassword'])->name('change-password');
     Route::post('/change-password', [ProfileController::class, 'updatePassword'])->name('change-password.update');
 });

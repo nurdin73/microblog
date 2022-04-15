@@ -2,6 +2,9 @@
 @section('title', 'Change password')
 @section('content')
   <div class="container px-6 mx-auto grid">
+    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+      Change Password
+    </h2>
     @if (session('status'))
       <div class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
         <div class="flex items-center">
@@ -12,8 +15,55 @@
         </div>
       </div>
     @endif
-    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-      Change Password
-    </h2>
+    <form action="{{ route('admin.change-password.update') }}" method="post">
+      @csrf
+      <label class="block text-sm mb-2">
+        <span class="text-gray-700 dark:text-gray-400">Old Password</span>
+        <input
+          class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+          placeholder="Jane Doe"
+          name="old_password"
+          value="{{ old('old_password') }}"
+          type="password"
+        />
+        @error('old_password')
+          <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
+        @enderror
+      </label>
+      <label class="block text-sm mb-2">
+        <span class="text-gray-700 dark:text-gray-400">New Password</span>
+        <input
+          class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+          placeholder="Jane Doe"
+          name="password"
+          value="{{ old('password') }}"
+          type="password"
+        />
+        @error('password')
+          <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
+        @enderror
+      </label>
+      <label class="block text-sm mb-2">
+        <span class="text-gray-700 dark:text-gray-400">Password Confirmation</span>
+        <input
+          class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+          placeholder="Jane Doe"
+          name="password_confirmation"
+          value="{{ old('password_confirmation') }}"
+          type="password"
+        />
+        @error('password_confirmation')
+          <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
+        @enderror
+      </label>
+      <div class="flex mt-3">
+        <button class="px-4 py-2 mr-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" type="submit">
+          Change
+        </button>
+        <a class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-md active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red" href="{{ route('admin.collections.index') }}">
+          Cancel
+        </a>
+      </div>
+    </form>
   </div>    
 @endsection

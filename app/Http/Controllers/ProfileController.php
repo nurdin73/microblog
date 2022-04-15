@@ -14,12 +14,6 @@ class ProfileController extends Controller
         $this->profileRepository = $profileRepository;
     }
 
-    public function index()
-    {
-        $user = $this->profileRepository->get(auth()->id());
-        return view('admin.profile.index', compact('user'));
-    }
-
     public function changePassword()
     {
         return view('admin.profile.change-password');
@@ -45,6 +39,6 @@ class ProfileController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        return redirect()->route('admin.profile.index')->with('success', 'Password has been changed');
+        return redirect()->back()->with('status', 'Password has been changed');
     }
 }
