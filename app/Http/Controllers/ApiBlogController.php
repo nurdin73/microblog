@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\BlogCollection;
 use App\Http\Resources\BlogResource;
-use App\Repositories\BlogRepository;
+use App\Repositories\Blog\BlogRepository;
 use Illuminate\Http\Request;
 
 class ApiBlogController extends Controller

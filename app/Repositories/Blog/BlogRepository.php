@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Blog;
 
 use App\Models\Blog;
 use App\Models\BlogPhoto;
@@ -8,7 +8,7 @@ use App\Models\BlogTag;
 use App\Traits\ImageOptimize;
 use Illuminate\Support\Facades\Log;
 
-class BlogRepository
+class BlogRepository implements BlogInterface
 {
   use ImageOptimize;
   public function all(String $search = '', Int $limit = 10, String $by = 'created_at', String $order = 'desc', String $status = '', $additional_info = '')

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\QuoteFunfactCollection;
 use App\Http\Resources\QuoteResource;
-use App\Repositories\QuoteFunfactRepository;
-use App\Repositories\TagRepository;
+use App\Repositories\QuoteFunfact\QuoteFunfactRepository;
+use App\Repositories\Tag\TagRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;

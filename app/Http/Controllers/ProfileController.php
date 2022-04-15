@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\ProfileRepository;
+use App\Repositories\Profile\ProfileRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 

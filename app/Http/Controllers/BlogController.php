@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\BlogRepository;
-use App\Repositories\TagRepository;
+use App\Repositories\Blog\BlogRepository;
+use App\Repositories\Tag\TagRepository;
 use App\Traits\ImageOptimize;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

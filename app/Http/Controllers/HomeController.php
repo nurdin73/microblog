@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\BlogRepository;
-use App\Repositories\CollectionRepository;
-use App\Repositories\QuoteFunfactRepository;
+use App\Repositories\Blog\BlogRepository;
+use App\Repositories\Collection\CollectionRepository;
+use App\Repositories\QuoteFunfact\QuoteFunfactRepository;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller

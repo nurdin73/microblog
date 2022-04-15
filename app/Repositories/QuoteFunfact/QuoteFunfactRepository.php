@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\QuoteFunfact;
 
 use App\Models\QuoteFunfact;
 use App\Models\QuoteFunfactTag;

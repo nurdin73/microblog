@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\TagRepository;
+use App\Repositories\Tag\TagRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
