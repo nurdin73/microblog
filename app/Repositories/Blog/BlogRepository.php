@@ -132,7 +132,7 @@ class BlogRepository implements BlogInterface
     return $message;
   }
 
-  public function total()
+  public function total() : Int
   {
     return Blog::count();
   }

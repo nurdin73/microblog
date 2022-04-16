@@ -4,7 +4,7 @@ namespace App\Repositories\Profile;
 
 use App\Models\User;
 
-class ProfileRepository
+class ProfileRepository implements ProfileInterface
 {
     protected $user;
     public function __construct(User $user)
@@ -17,7 +17,7 @@ class ProfileRepository
         return $this->user->find($id);
     }
 
-    public function update($id, $data)
+    public function update(Int $id, Array $data)
     {
         $user = $this->user->find($id);
         $user->update($data);

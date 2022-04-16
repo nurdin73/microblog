@@ -5,7 +5,7 @@ namespace App\Repositories\QuoteFunfact;
 use App\Models\QuoteFunfact;
 use App\Models\QuoteFunfactTag;
 
-class QuoteFunfactRepository
+class QuoteFunfactRepository implements QuoteFunfactInterface
 {
   protected $quote_funfact;
   public function __construct(QuoteFunfact $quote_funfact)

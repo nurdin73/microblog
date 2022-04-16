@@ -4,7 +4,7 @@ namespace App\Repositories\Collection;
 
 use App\Models\Collection;
 
-class CollectionRepository
+class CollectionRepository implements CollectionInterface
 {
   protected $collection;
   public function __construct(Collection $collection)
