@@ -16,7 +16,13 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+Route::get('/', function () {
+    return response([
+        'message' => 'Welcome to the API. this is base url for api',
+        'status' => 'success',
+        'version' => '1.0.0'
+    ]);
+});
 Route::group(['prefix' => 'blogs'], function() {
     Route::get('/', [ApiBlogController::class, 'blogs']);
     Route::get('/detail/{id}', [ApiBlogController::class, 'detail']);
