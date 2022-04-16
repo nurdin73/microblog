@@ -10,7 +10,8 @@
 
 ### Installation
 * Clone the repository
-``` git clone https://github.com/nurdin73/microblog.git 
+``` 
+git clone https://github.com/nurdin73/microblog.git
 ```
 * Install the dependencies
 ```
@@ -51,13 +52,16 @@ composer install
 php artisan key:generate
 ```
 * Run the database migration
-``` php artisan migrate
+``` 
+php artisan migrate
 ```
 * Run the database seeder
-``` php artisan db:seed
+``` 
+php artisan db:seed
 ```
 * Run the application
-``` php artisan serve
+``` 
+php artisan serve
 ```
 * Open the browser and go to http://localhost:8000/
 
