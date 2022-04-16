@@ -61,7 +61,7 @@ interface QuoteFunfactInterface
 
   /**
    * Get Total Quote or Funfact
-   * @param String $status
+   * @param String $type
    * @return Int
    */
   public function total(String $type = 'quote'): Int;
