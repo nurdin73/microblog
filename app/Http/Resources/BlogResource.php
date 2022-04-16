@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class BlogResource extends JsonResource
 {
@@ -25,7 +26,7 @@ class BlogResource extends JsonResource
     {
         // return parent::toArray($request);
         $data['id'] = $this->resource->id;
-        $data['title'] = $this->resource->title;
+        $data['title'] = Str::title($this->resource->title);
         $data['slug'] = $this->resource->slug;
         $data['content'] = $this->resource->content;
         $data['posted_at'] = $this->resource->created_at->format('d F Y');

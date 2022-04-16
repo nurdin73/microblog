@@ -1,9 +1,9 @@
 <?php
-namespace App\Repositories;
+namespace App\Repositories\Tag;
 
 use App\Models\Tag;
 
-class TagRepository
+class TagRepository implements TagInterface
 {
   protected $tag;
 

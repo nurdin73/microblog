@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\BlogCollection;
 use App\Http\Resources\BlogResource;
-use App\Repositories\BlogRepository;
+use App\Repositories\Blog\BlogRepository;
 use Illuminate\Http\Request;
 
 class ApiBlogController extends Controller
@@ -29,7 +29,7 @@ class ApiBlogController extends Controller
     // for api
     public function detail($id)
     {
-        $userId = request()->query('userKey', '');
+        $userId = request()->query('customer_id', '');
         $data = $this->blogRepository->detail($id, $userId);
         if(!$data) return response(['message' => 'Blog not found'], 404);
         return response(new BlogResource($data));
@@ -39,13 +39,13 @@ class ApiBlogController extends Controller
     {
         $data = $request->validate([
             'blog_id' => 'required|integer',
-            'shopify_id' => 'required|integer',
+            'customer_id' => 'required|integer',
         ]);
-        $sync = $this->blogRepository->syncLikeUnlike($data['blog_id'], $data['shopify_id']);
+        $sync = $this->blogRepository->syncLikeUnlike($data['blog_id'], $data['customer_id']);
+        if(!$sync) return response(['message' => 'Blog or customer id not found'], 404);
         return response()->json([
             'status' => 'success',
-            'message' => 'Like/Unlike successfully',
-            'data' => $sync
+            'message' => $sync
         ]);
     }
 }

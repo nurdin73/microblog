@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CollectionResource;
-use App\Repositories\CollectionRepository;
+use App\Repositories\Collection\CollectionRepository;
+use App\Traits\Shopify;
 use Illuminate\Http\Request;
 
 class CollectionController extends Controller
 {
+    use Shopify;
     protected $collectionRepository;
 
-    public function __construct(CollectionRepository $collectionRepository) {
+    public function __construct(CollectionRepository $collectionRepository)
+    {
         $this->collectionRepository = $collectionRepository;
     }
 
@@ -21,13 +24,22 @@ class CollectionController extends Controller
      */
     public function index()
     {
-        $data['collections'] = $this->collectionRepository->all();
+        $search = request()->query('search', '');
+        $limit = request()->query('limit', 10);
+        $by = request()->query('by', 'created_at');
+        $order = request()->query('order', 'desc');
+        $data['collections'] = $this->collectionRepository->paginate($search, $limit, $by, $order);
+        $data['search'] = $search;
+        $data['limit'] = $limit;
+        $data['shopify_collections'] = $this->getAllCollections();
         return view('admin.collection.index', $data);
     }
 
     public function collections()
     {
-        $data = $this->collectionRepository->all(true);
+        $limit = request()->query('limit', '');
+        $search = request()->query('search', '');
+        $data = $this->collectionRepository->all(true, $search, $limit);
         return response(CollectionResource::collection($data), 200);
     }
 
@@ -45,8 +57,12 @@ class CollectionController extends Controller
             'caption' => 'required'
         ]);
 
-        $add = $this->collectionRepository->add($data);
-        return redirect()->route('admin.collection.index')->with('success', 'Collection added successfully');
+        try {
+            $add = $this->collectionRepository->add($data);
+            return redirect()->route('admin.collections.index')->with('success', 'Collection added successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -58,6 +74,13 @@ class CollectionController extends Controller
     public function show($id)
     {
         return $this->collectionRepository->get($id);
+    }
+
+    public function edit($id)
+    {
+        $data['shopify_collections'] = $this->getAllCollections();
+        $data['collection'] = $this->collectionRepository->get($id);
+        return view('admin.collection.edit', $data);
     }
 
     /**
@@ -75,8 +98,12 @@ class CollectionController extends Controller
             'caption' => 'required'
         ]);
 
-        $update = $this->collectionRepository->update($id, $data);
-        return redirect()->route('admin.collection.index')->with('success', 'Collection updated successfully');
+        try {
+            $update = $this->collectionRepository->update($id, $data);
+            return redirect()->route('admin.collections.index')->with('success', 'Collection updated successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Collection update failed');
+        }
     }
 
     /**

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class BlogLike extends Model
 {
     use HasFactory;
-    protected $fillable = ['blog_id', 'shopify_id', 'status'];
+    protected $fillable = ['blog_id', 'customer_id', 'status'];
 
     public function blog()
     {
