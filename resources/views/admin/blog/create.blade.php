@@ -60,7 +60,14 @@
           @enderror
         </label>
         <div class="grid grid-cols-2 gap-6 mt-3">
-          <label class="block text-sm">
+          <div>
+            <label for="formFileMultiple" class="form-label text-gray-700 dark:text-gray-400">Photos</label>
+            <input name="photos[]" class="form-control block w-full px-3 py-1.5 text-base font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray" type="file" id="formFileMultiple" multiple>
+            @error('photos')
+              <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
+            @enderror
+          </div>
+          {{-- <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">Photos</span>
             <input
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -72,7 +79,7 @@
             @error('photos')
               <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
             @enderror
-          </label>
+          </label> --}}
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">
               Status

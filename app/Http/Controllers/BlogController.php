@@ -79,6 +79,9 @@ class BlogController extends Controller
                         return redirect()->back()->with('error', 'Failed to upload photo');
                     }
                 }
+            } else {
+                DB::rollBack();
+                return redirect()->back()->withErrors(['photos' => 'Please upload at least one photo']);
             }
             if($request->has('tags')) {
                 $tags = $request->input('tags');
