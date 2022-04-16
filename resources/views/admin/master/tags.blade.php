@@ -157,7 +157,7 @@
       <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray bg-clip-padding rounded-md outline-none text-current">
         <div class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b dark:border-gray-800 border-gray-200 rounded-t-md">
           <h5 class="text-xl font-medium leading-normal text-gray-700 dark:text-gray-200" id="editModalLabel">
-            Add Tag
+            Edit Tag
           </h5>
           <button type="button"
             class="btn-close box-content w-4 h-4 p-1 text-black border-none dark:text-gray-200 rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
