@@ -22,12 +22,19 @@ class CollectionRepository
     return $collections;
   }
 
-  public function all(Bool $status = false)
+  public function all(Bool $status = false, String $search, String $limit = '')
   {
+    $collections = $this->collection;
+    if($search != '') {
+      $collections = $collections->where('title', 'like', '%' . $search . '%');
+    }
+    if($limit != '') {
+      $collections = $collections->limit($limit);
+    }
     if ($status) {
-      return $this->collection->where('is_active', true)->get();
+      return $collections->where('is_active', true)->get();
     } else {
-      return $this->collection->get();
+      return $collections->get();
     }
   }
 

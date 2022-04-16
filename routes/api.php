@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'blogs'], function() {
     Route::get('/', [ApiBlogController::class, 'blogs']);
     Route::get('/detail/{id}', [ApiBlogController::class, 'detail']);
-    Route::post('/likeUnlike', [ApiBlogController::class, 'likeUnlike']);
+    Route::post('/like-dislike', [ApiBlogController::class, 'likeUnlike']);
 });
 
 Route::get('/quote-funfacts', [QuoteFunfactController::class, 'getRandomQuotesFunfacts']);

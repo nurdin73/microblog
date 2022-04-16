@@ -47,15 +47,15 @@ class BlogRepository implements BlogInterface
     return $blog;
   }
 
-  public function detail($id, $user_id)
+  public function detail(Int $id, String $customer_id)
   {
     $blog = Blog::with(['tags', 'photos'])->withCount(['likes' => function ($query) {
       $query->where('status', true);
     }])->where('id', $id)->where('status', 'published')->first();
     if (!$blog) return false;
-    if ($user_id != '') {
+    if ($customer_id != '') {
       Log::info("masuk sini");
-      $blog->setRelation('likes', $blog->likes()->where('shopify_id', $user_id)->first());
+      $blog->setRelation('likes', $blog->likes()->where('customer_id', $customer_id)->first());
     }
     return $blog;
   }

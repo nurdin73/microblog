@@ -38,7 +38,9 @@ class QuoteFunfactController extends Controller
 
     public function getRandomQuotesFunfacts()
     {
-        $data = $this->quoteFunfactRepository->random(2);
+        $limit = request()->query('limit', '');
+        $data = $this->quoteFunfactRepository->random($limit);
+        if(count($data) == 0) return response(['message' => 'Quote funfact not found'], 404);
         return response(QuoteResource::collection($data), 200);
     }
 

@@ -47,10 +47,14 @@ class QuoteFunfactRepository
     return $quote_funfact;
   }
 
-  public function random($limit = 10)
+  public function random($limit = '')
   {
     $date = date('Y-m-d');
-    $quote_funfacts = $this->quote_funfact->select('*')->with('tags')->where('status', 'published')->where('published_at', '=', $date)->orderByRaw("RAND()")->limit($limit)->get();
+    $quote_funfacts = $this->quote_funfact->select('*')->with('tags')->where('status', 'published')->where('published_at', '=', $date)->orderByRaw("RAND()");
+    if($limit != '') {
+      $quote_funfacts = $quote_funfacts->limit($limit);
+    }
+    $quote_funfacts = $quote_funfacts->get();
     return $quote_funfacts;
   }
 

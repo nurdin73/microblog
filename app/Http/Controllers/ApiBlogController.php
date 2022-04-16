@@ -29,7 +29,7 @@ class ApiBlogController extends Controller
     // for api
     public function detail($id)
     {
-        $userId = request()->query('userKey', '');
+        $userId = request()->query('customer_id', '');
         $data = $this->blogRepository->detail($id, $userId);
         if(!$data) return response(['message' => 'Blog not found'], 404);
         return response(new BlogResource($data));

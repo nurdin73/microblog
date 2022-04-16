@@ -37,7 +37,9 @@ class CollectionController extends Controller
 
     public function collections()
     {
-        $data = $this->collectionRepository->all(true);
+        $limit = request()->query('limit', '');
+        $search = request()->query('search', '');
+        $data = $this->collectionRepository->all(true, $search, $limit);
         return response(CollectionResource::collection($data), 200);
     }
 
