@@ -34,6 +34,7 @@ Route::get('/', function () {
                     'by' => 'string',
                     'order' => 'string',
                     'aditional' => 'string',
+                    'page' => 'integer'
                 ],
             ],
             [
