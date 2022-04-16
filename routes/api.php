@@ -20,7 +20,67 @@ Route::get('/', function () {
     return response([
         'message' => 'Welcome to the API. this is base url for api',
         'status' => 'success',
-        'version' => '1.0.0'
+        'version' => '1.0.0',
+        'endpoint' => [
+            [
+                'title' => 'Blogs',
+                'url' => url('api/blogs'),
+                'method' => 'GET',
+                'body' => null,
+                'params' => null,
+                'query' => [
+                    'search' => 'string',
+                    'limit' => 'integer',
+                    'by' => 'string',
+                    'order' => 'string',
+                    'aditional' => 'string',
+                ],
+            ],
+            [
+                'title' => 'Blog Detail',
+                'url' => url('api/blogs/{id}'),
+                'method' => 'GET',
+                'body' => null,
+                'params' => [
+                    'id' => 'integer',
+                ],
+                'query' => [
+                    'customer_id' => 'integer',
+                ],
+            ],
+            [
+                'title' => 'Like/Unlike Blog',
+                'url' => url('api/blogs/like-unlike'),
+                'method' => 'POST',
+                'body' => [
+                    'blog_id' => 'integer',
+                    'customer_id' => 'integer',
+                ],
+                'params' => null,
+                'query' => null,
+            ],
+            [
+                'title' => 'Quotes/Funfacts',
+                'url' => url('api/quote-funfacts'),
+                'method' => 'GET',
+                'body' => null,
+                'params' => null,
+                'query' => [
+                    'limit' => 'integer',
+                ],
+            ],
+            [
+                'title' => 'Collections',
+                'url' => url('api/collections'),
+                'method' => 'GET',
+                'body' => null,
+                'params' => null,
+                'query' => [
+                    'search' => 'string',
+                    'limit' => 'integer',
+                ],
+            ]
+        ]
     ]);
 });
 Route::group(['prefix' => 'blogs'], function() {
