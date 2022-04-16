@@ -25,7 +25,9 @@
           name="collection_id"
         >
           <option value="">Choose</option>
-          <option value="123">Collection</option>
+          @foreach ($shopify_collections as $sc)
+            <option value="{{ $sc->id }}" @if($collection->collection_id == $sc->id) selected @endif>{{ $sc->title }}</option>
+          @endforeach
         </select>
         @error('collection_id')
           <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>

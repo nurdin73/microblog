@@ -8,4 +8,5 @@ interface BlogInterface
     public function add(Array $data);
     public function delete(Int $id);
     public function update(Array $data, Int $id);
+    public function syncLikeUnlike(Int $blog_id, String $customer_id);
 }

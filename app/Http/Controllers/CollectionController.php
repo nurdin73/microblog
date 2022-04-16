@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\CollectionResource;
 use App\Repositories\Collection\CollectionRepository;
+use App\Traits\Shopify;
 use Illuminate\Http\Request;
 
 class CollectionController extends Controller
 {
+    use Shopify;
     protected $collectionRepository;
 
     public function __construct(CollectionRepository $collectionRepository)
@@ -29,6 +31,7 @@ class CollectionController extends Controller
         $data['collections'] = $this->collectionRepository->paginate($search, $limit, $by, $order);
         $data['search'] = $search;
         $data['limit'] = $limit;
+        $data['shopify_collections'] = $this->getAllCollections();
         return view('admin.collection.index', $data);
     }
 
@@ -73,6 +76,7 @@ class CollectionController extends Controller
 
     public function edit($id)
     {
+        $data['shopify_collections'] = $this->getAllCollections();
         $data['collection'] = $this->collectionRepository->get($id);
         return view('admin.collection.edit', $data);
     }

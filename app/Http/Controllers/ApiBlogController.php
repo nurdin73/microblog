@@ -39,13 +39,13 @@ class ApiBlogController extends Controller
     {
         $data = $request->validate([
             'blog_id' => 'required|integer',
-            'shopify_id' => 'required|integer',
+            'customer_id' => 'required|integer',
         ]);
-        $sync = $this->blogRepository->syncLikeUnlike($data['blog_id'], $data['shopify_id']);
+        $sync = $this->blogRepository->syncLikeUnlike($data['blog_id'], $data['customer_id']);
+        if(!$sync) return response(['message' => 'Blog or customer id not found'], 404);
         return response()->json([
             'status' => 'success',
-            'message' => 'Like/Unlike successfully',
-            'data' => $sync
+            'message' => $sync
         ]);
     }
 }

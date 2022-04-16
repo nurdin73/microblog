@@ -6,11 +6,12 @@ use App\Models\Blog;
 use App\Models\BlogPhoto;
 use App\Models\BlogTag;
 use App\Traits\ImageOptimize;
+use App\Traits\Shopify;
 use Illuminate\Support\Facades\Log;
 
 class BlogRepository implements BlogInterface
 {
-  use ImageOptimize;
+  use ImageOptimize, Shopify;
   public function all(String $search = '', Int $limit = 10, String $by = 'created_at', String $order = 'desc', String $status = '', $additional_info = '')
   {
     $blogs = Blog::select('*');
@@ -102,18 +103,33 @@ class BlogRepository implements BlogInterface
     return $blog;
   }
 
-  public function syncLikeUnlike(Int $blog_id, String $shopify_id)
+  public function syncLikeUnlike(Int $blog_id, String $customer_id)
   {
     $blog = Blog::findOrFail($blog_id);
-    $check = $blog->likes()->where('shopify_id', $shopify_id)->first();
+    $checkCustomer = $this->getCustomer($customer_id);
+    if(!$checkCustomer) return false;
+    $check = $blog->likes()->where('customer_id', $customer_id)->first();
     if ($check) {
-      $blog->likes()->where('shopify_id', $shopify_id)->update([
-        'status' => false
-      ]);
+      if($check->status) {
+        $blog->likes()->where('customer_id', $customer_id)->update([
+          'status' => false
+        ]);
+        $message = "Blog $blog->title has been disliked";
+      } else {
+        $blog->likes()->where('customer_id', $customer_id)->update([
+          'status' => true
+        ]);
+        $message = "Blog $blog->title has been liked";
+      }
     } else {
-      $blog->likes()->create(['shopify_id' => $shopify_id]);
+      $blog->likes()->create([
+        'customer_id' => $customer_id,
+        'blog_id' => $blog_id,
+        'status' => true
+      ]);
+      $message = "Blog $blog->title has been liked";
     }
-    return $blog;
+    return $message;
   }
 
   public function total()
