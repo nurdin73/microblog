@@ -9,7 +9,9 @@
 * [MySQL](https://www.mysql.com/products/workbench/)
 
 ### Installation
-* Clone the [repository](https://github.com/nurdin73/microblog.git)
+* Clone the repository
+``` git clone https://github.com/nurdin73/microblog.git 
+```
 * Install the dependencies
 ```
 composer install
