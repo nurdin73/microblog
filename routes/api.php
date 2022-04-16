@@ -38,7 +38,7 @@ Route::get('/', function () {
             ],
             [
                 'title' => 'Blog Detail',
-                'url' => url('api/blogs/{id}'),
+                'url' => url('api/blogs/:id'),
                 'method' => 'GET',
                 'body' => null,
                 'params' => [
@@ -50,7 +50,7 @@ Route::get('/', function () {
             ],
             [
                 'title' => 'Like/Unlike Blog',
-                'url' => url('api/blogs/like-unlike'),
+                'url' => url('api/blogs/like-dislike'),
                 'method' => 'POST',
                 'body' => [
                     'blog_id' => 'integer',
