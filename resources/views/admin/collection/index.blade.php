@@ -136,7 +136,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable relative w-auto pointer-events-none">
       <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray bg-clip-padding rounded-md outline-none text-current">
         <div class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800 rounded-t-md">
-          <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalCenteredScrollableLabel">
+          <h5 class="text-xl font-medium leading-normal text-gray-700 dark:text-gray-200" id="exampleModalCenteredScrollableLabel">
             Add Collection
           </h5>
           <button type="button"
