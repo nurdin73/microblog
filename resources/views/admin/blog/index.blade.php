@@ -37,7 +37,7 @@
             value="{{ $search }}"
           />
           <input type="hidden" name="limit" value="{{ $limit }}">
-          {{-- <input type="hidden" name="page" value="{{ request()->page }}"> --}}
+          <input type="hidden" name="page" value="{{ request()->page ?? 1 }}">
           <button type="submit" class="absolute inset-y-0 right-0 px-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-r-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
             Search
           </button>
@@ -59,10 +59,13 @@
             </tr>
           </thead>
           <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+            @php
+              $no = $blogs->firstItem();
+            @endphp
             @forelse ($blogs as $b)
               <tr class="text-gray-700 dark:text-gray-400">
                 <td class="px-4 py-3 text-center">
-                  {{ $loop->iteration }}
+                  {{ $no++ }}
                 </td>
                 <td class="px-4 py-3 text-sm ">
                   <a title="{{ $b->title }}" href="{{ route('admin.blogs.show', ['blog' => $b->id]) }}" class="text-purple-600 dark:text-gray-200 hover:underline">{{ \Str::limit($b->title, 60) }}</a>
@@ -106,7 +109,7 @@
         class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800"
       >
         <span class="flex items-center col-span-3">
-          Showing {{ $blogs->firstItem() }} - {{ $blogs->lastItem() }} of {{ $blogs->total() }}
+          Showing {{ $blogs->firstItem() ?? 0 }} - {{ $blogs->lastItem() ?? 0 }} of {{ $blogs->total() }}
         </span>
         <span class="col-span-2"></span>
         <!-- Pagination -->
@@ -123,6 +126,7 @@
     function limitItem() {  
       var limit = $('#limit').val();
       var search = $('#search').val();
+      var page = '{{ request()->page ?? 1 }}';
       const form = document.createElement('form');
       form.method = 'GET';
       form.action = '{{ route('admin.blogs.index') }}';
@@ -135,6 +139,11 @@
       input.type = 'hidden';
       input.name = 'search';
       input.value = search;
+      form.appendChild(input);
+      input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'page';
+      input.value = page;
       form.appendChild(input);
       document.body.appendChild(form);
       form.submit();
