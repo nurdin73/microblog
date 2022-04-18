@@ -25,6 +25,15 @@ interface BlogInterface
      * @return mixed
      */
     public function detail(Int $id, String $user_id);
+
+    /**
+     * Get blog detail
+     *
+     * @param int $id
+     * @param string $status
+     * @return mixed
+     */
+    public function get(Int $id, String $status = '');
     
     /**
      * Add blog
