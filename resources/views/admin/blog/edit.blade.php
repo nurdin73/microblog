@@ -104,12 +104,11 @@
           </div>
           @endforeach
           <label class="block text-sm">
-            <form action="{{ route('admin.image-upload') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('admin.image-upload') }}" method="post" enctype="multipart/form-data" id="formUpload">
               @csrf
-              <input type="hidden" name="blog_id" value="{{ $blog->id }}">
               <div>
                 <label for="formFileMultiple" class="form-label text-gray-700 dark:text-gray-400">Photos</label>
-                <input name="image" onchange="this.form.submit()" accept="image/*" class="form-control block w-full px-3 py-1.5 text-base font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray" type="file" id="formFileMultiple" multiple>
+                <input name="image" accept="image/*" id="uploadImage" class="form-control block w-full px-3 py-1.5 text-base font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray" type="file" id="formFileMultiple" multiple>
                 @error('image')
                   <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
                 @enderror
@@ -171,6 +170,26 @@
       quill.on('text-change', function(delta, oldDelta, source) {
         $('#field-content').val(quill.root.innerHTML);
       });
+
+      $('#uploadImage').on('change', function() {
+        const files = $(this).get(0).files[0];
+        const data = new FormData()
+        data.append('image', files)
+        data.append('blog_id', '{{ $blog->id }}')
+        $.ajax({
+          url: '{{ route('admin.image-upload') }}',
+          method: 'POST',
+          data: data,
+          contentType: false,
+          processData: false,
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          success: function(data) {
+            window.location.reload()
+          }
+        })
+      })
 
       $('.deleteImage').on('submit', function(e) {
         e.preventDefault();
