@@ -29,7 +29,13 @@ class BlogRepository implements BlogInterface
             $query->where('status', true);
           }]);
         } else {
-          $blogs = $blogs->with($info);
+          if($info == 'photos') {
+            $blogs = $blogs->with(['photos' => function($q) {
+              $q->orderBy('position', 'asc');
+            }]);
+          } else {
+            $blogs = $blogs->with($info);
+          }
         }
       }
     }
