@@ -39,7 +39,9 @@ class BlogRepository implements BlogInterface
 
   public function get($id, $status = '')
   {
-    $blog = Blog::where('id', $id)->with(['tags', 'photos']);
+    $blog = Blog::where('id', $id)->with(['tags', 'photos' => function($q) {
+      $q->orderBy('position', 'asc');
+    }]);
     if ($status != '') {
       $blog = $blog->where('status', $status);
     }
@@ -135,5 +137,30 @@ class BlogRepository implements BlogInterface
   public function total() : Int
   {
     return Blog::count();
+  }
+
+  public function imageUpload(String $src, Int $blog_id)
+  {
+    $blog = Blog::findOrFail($blog_id);
+    $checkOrderLast = BlogPhoto::where('blog_id', $blog_id)->orderBy('position', 'desc')->value('position') ?? 0;
+    $image = BlogPhoto::create([
+      'src' => $src,
+      'blog_id' => $blog_id,
+      'position' => $checkOrderLast + 1
+    ]);
+  }
+
+  public function deletePhoto(Int $id)
+  {
+    $photo = BlogPhoto::findOrFail($id);
+    $this->deleteImage($photo->src);
+    $photo->delete();
+  }
+
+  public function changeImagePosition(Int $id, Int $position)
+  {
+    $photo = BlogPhoto::findOrFail($id);
+    $photo->position = $position;
+    $photo->save();
   }
 }

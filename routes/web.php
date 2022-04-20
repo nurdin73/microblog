@@ -30,6 +30,9 @@ Auth::routes([
 Route::group(['middleware' => 'auth', 'as' => 'admin.'], function () {
     Route::get('/', HomeController::class)->name('home');
     Route::resource('blogs', BlogController::class);
+    Route::post('/image-upload', [BlogController::class, 'imageUpload'])->name('image-upload');
+    Route::put('/change-image-position', [BlogController::class, 'changeImagePosition'])->name('change-image-position');
+    Route::delete('/image-delete/{id}', [BlogController::class, 'imageDelete'])->name('image-delete');
     Route::resource('quote-funfacts', QuoteFunfactController::class);
     Route::resource('collections', CollectionController::class)->except(['create']);
     Route::group(['prefix' => 'master', 'as' => 'master.'], function () {

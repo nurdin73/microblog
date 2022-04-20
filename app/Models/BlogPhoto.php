@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class BlogPhoto extends Model
 {
     use HasFactory;
-    protected $fillable = ['blog_id', 'src'];
+    protected $fillable = ['blog_id', 'src', 'position'];
 
     public function blog()
     {

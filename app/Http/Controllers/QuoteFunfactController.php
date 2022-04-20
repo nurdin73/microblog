@@ -72,6 +72,7 @@ class QuoteFunfactController extends Controller
         ]);
         DB::beginTransaction();
         try {
+            $data['link'] = $request->input('link');
             $data['slug'] = Str::slug($data['title']);
             $quote_funfact = $this->quoteFunfactRepository->add($data);
             if ($request->has('tags')) {
@@ -131,6 +132,7 @@ class QuoteFunfactController extends Controller
         ]);
         DB::beginTransaction();
         try {
+            $data['link'] = $request->input('link');
             $data['slug'] = Str::slug($data['title']);
             $quote_funfact = $this->quoteFunfactRepository->update($data, $id);
             if ($request->has('tags')) {

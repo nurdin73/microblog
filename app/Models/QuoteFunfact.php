@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class QuoteFunfact extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'slug', 'type', 'content', 'status', 'published_at'];
+    protected $fillable = ['title', 'slug', 'type', 'content', 'status', 'published_at', 'link'];
 
     public function tags()
     {
