@@ -17,6 +17,7 @@ class BlogPhotoResource extends JsonResource
         // return parent::toArray($request);
         // $data['id'] = $this->id;
         $data['src'] = $this->src;
+        $data['position'] = $this->position;
         return $data;
     }
 }
