@@ -40,7 +40,7 @@ class QuoteFunfactController extends Controller
     {
         $limit = request()->query('limit', '');
         $data = $this->quoteFunfactRepository->random($limit);
-        if(count($data) == 0) return response(['message' => 'Quote funfact not found'], 404);
+        if($data->count() == 0) return response(['message' => 'Quote funfact not found'], 404);
         return response(QuoteResource::collection($data), 200);
     }
 
