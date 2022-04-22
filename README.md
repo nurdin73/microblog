@@ -7,6 +7,9 @@
 * [Git](https://git-scm.com/downloads)
 * [PHP](https://www.php.net/downloads.php)
 * [MySQL](https://www.mysql.com/products/workbench/)
+* [PostgreSQL](https://www.postgresql.org/download/)
+* [Apache](https://httpd.apache.org/download.cgi)
+* [Nginx](https://nginx.org/en/download.html)
 
 ### Installation
 * Clone the repository
