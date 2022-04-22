@@ -129,7 +129,7 @@ class CollectionController extends Controller
     {
         $search = request()->query('search', '');
         $limit = request()->query('limit', 10);
-        $data = $this->getAllCollections('graphql', $search, $limit);
+        $data = $this->getAllCollections($search, $limit);
         if(isset($data['errors'])) {
             return response()->json(['message' => $data['errors'][0]['message']], 500);
         } else {

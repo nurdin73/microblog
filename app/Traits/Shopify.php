@@ -51,9 +51,10 @@ trait Shopify
     return json_decode($output);
   }
 
-  public function getAllCustomer($type = 'rest')
+  public function getAllCustomer()
   {
-    if($type == 'rest') {
+    $typeApi = config('shopify.type_api');
+    if($typeApi == 'admin_api') {
       $url = 'customers.json';
       try {
         return $this->req($url)->customers;
@@ -69,9 +70,10 @@ trait Shopify
    * @return Object
    */
 
-  public function getCustomer($id, $type = 'rest')
+  public function getCustomer($id)
   {
-    if($type == 'rest') {
+    $typeApi = config('shopify.type_api');
+    if($typeApi == 'admin_api') {
       $url = "customers/$id.json";
       try {
         return $this->req($url)->customer;
@@ -99,9 +101,10 @@ trait Shopify
     }
   }
 
-  public function getAllCollections($type = 'rest', $searchQuery = '', $limit = 10)
+  public function getAllCollections($searchQuery = '', $limit = 10)
   {
-    if($type == 'rest') {
+    $typeApi = config('shopify.type_api');
+    if($typeApi == 'admin_api') {
       $url = "custom_collections.json";
       try {
         return $this->req($url)->custom_collections;
@@ -130,9 +133,10 @@ trait Shopify
     }
   }
 
-  public function getCollection($id, $type = 'rest')
+  public function getCollection($id)
   {
-    if($type == 'rest') {
+    $typeApi = config('shopify.type_api');
+    if($typeApi == 'admin_api') {
       $url = "custom_collections/$id.json";
       try {
         return $this->req($url)->custom_collection;
