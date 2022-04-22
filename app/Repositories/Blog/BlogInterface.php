@@ -25,6 +25,15 @@ interface BlogInterface
      * @return mixed
      */
     public function detail(Int $id, String $user_id);
+
+    /**
+     * Get blog detail
+     *
+     * @param int $id
+     * @param string $status
+     * @return mixed
+     */
+    public function get(Int $id, String $status = '');
     
     /**
      * Add blog
@@ -86,4 +95,27 @@ interface BlogInterface
      * @return Int
      */
     public function total() : Int;
+
+    /**
+     * Upload image
+     * @param String $src
+     * @param Int $blog_id
+     * @return void
+     */
+    public function imageUpload(String $src, Int $blog_id);
+
+    /**
+     * Delete photo
+     * @param Int $id
+     * @return void
+     */
+    public function deletePhoto(Int $id);
+
+    /**
+     * Change position photo
+     * @param Int $id
+     * @param Int $position
+     * @return void
+     */
+    public function changeImagePosition(Int $id, Int $position);
 }

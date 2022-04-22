@@ -31,7 +31,6 @@ class CollectionController extends Controller
         $data['collections'] = $this->collectionRepository->paginate($search, $limit, $by, $order);
         $data['search'] = $search;
         $data['limit'] = $limit;
-        $data['shopify_collections'] = $this->getAllCollections();
         return view('admin.collection.index', $data);
     }
 
@@ -78,8 +77,16 @@ class CollectionController extends Controller
 
     public function edit($id)
     {
-        $data['shopify_collections'] = $this->getAllCollections();
         $data['collection'] = $this->collectionRepository->get($id);
+        $getDetailColShopify = $this->getCollection($data['collection']['collection_id'], 'graphql');
+        if(isset($getDetailColShopify['errors'])) {
+            $data['detail_shopify'] = [
+                'title' => '',
+                'id' => ''
+            ];
+        } else {
+            $data['detail_shopify'] = $getDetailColShopify['data']['collection'];
+        }
         return view('admin.collection.edit', $data);
     }
 
@@ -116,5 +123,17 @@ class CollectionController extends Controller
     {
         $delete = $this->collectionRepository->delete($id);
         return redirect()->back()->with('success', 'Collection deleted successfully');
+    }
+
+    public function getCollectionShopify()
+    {
+        $search = request()->query('search', '');
+        $limit = request()->query('limit', 10);
+        $data = $this->getAllCollections($search, $limit);
+        if(isset($data['errors'])) {
+            return response()->json(['message' => $data['errors'][0]['message']], 500);
+        } else {
+            return response()->json($data['data']['collections']['nodes'], 200);
+        }
     }
 }

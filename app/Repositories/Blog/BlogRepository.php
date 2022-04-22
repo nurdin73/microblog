@@ -29,7 +29,13 @@ class BlogRepository implements BlogInterface
             $query->where('status', true);
           }]);
         } else {
-          $blogs = $blogs->with($info);
+          if($info == 'photos') {
+            $blogs = $blogs->with(['photos' => function($q) {
+              $q->orderBy('position', 'asc');
+            }]);
+          } else {
+            $blogs = $blogs->with($info);
+          }
         }
       }
     }
@@ -39,7 +45,9 @@ class BlogRepository implements BlogInterface
 
   public function get($id, $status = '')
   {
-    $blog = Blog::where('id', $id)->with(['tags', 'photos']);
+    $blog = Blog::where('id', $id)->with(['tags', 'photos' => function($q) {
+      $q->orderBy('position', 'asc');
+    }]);
     if ($status != '') {
       $blog = $blog->where('status', $status);
     }
@@ -106,24 +114,25 @@ class BlogRepository implements BlogInterface
   public function syncLikeUnlike(Int $blog_id, String $customer_id)
   {
     $blog = Blog::findOrFail($blog_id);
+    $type = config('shopify.type_api');
     $checkCustomer = $this->getCustomer($customer_id);
     if(!$checkCustomer) return false;
-    $check = $blog->likes()->where('customer_id', $customer_id)->first();
+    $check = $blog->likes()->where('customer_id', $type == 'storefront_api' ? $checkCustomer : $customer_id)->first();
     if ($check) {
       if($check->status) {
-        $blog->likes()->where('customer_id', $customer_id)->update([
+        $blog->likes()->where('customer_id', $type == 'storefront_api' ? $checkCustomer : $customer_id)->update([
           'status' => false
         ]);
         $message = "Blog $blog->title has been disliked";
       } else {
-        $blog->likes()->where('customer_id', $customer_id)->update([
+        $blog->likes()->where('customer_id', $type == 'storefront_api' ? $checkCustomer : $customer_id)->update([
           'status' => true
         ]);
         $message = "Blog $blog->title has been liked";
       }
     } else {
       $blog->likes()->create([
-        'customer_id' => $customer_id,
+        'customer_id' => $type == 'storefront_api' ? $checkCustomer : $customer_id,
         'blog_id' => $blog_id,
         'status' => true
       ]);
@@ -135,5 +144,30 @@ class BlogRepository implements BlogInterface
   public function total() : Int
   {
     return Blog::count();
+  }
+
+  public function imageUpload(String $src, Int $blog_id)
+  {
+    $blog = Blog::findOrFail($blog_id);
+    $checkOrderLast = BlogPhoto::where('blog_id', $blog_id)->orderBy('position', 'desc')->value('position') ?? 0;
+    $image = BlogPhoto::create([
+      'src' => $src,
+      'blog_id' => $blog_id,
+      'position' => $checkOrderLast + 1
+    ]);
+  }
+
+  public function deletePhoto(Int $id)
+  {
+    $photo = BlogPhoto::findOrFail($id);
+    $this->deleteImage($photo->src);
+    $photo->delete();
+  }
+
+  public function changeImagePosition(Int $id, Int $position)
+  {
+    $photo = BlogPhoto::findOrFail($id);
+    $photo->position = $position;
+    $photo->save();
   }
 }

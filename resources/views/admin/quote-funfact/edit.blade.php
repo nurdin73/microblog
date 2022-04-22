@@ -103,6 +103,19 @@
           @enderror
         </label>
       </div>
+      <label class="block text-sm">
+        <span class="text-gray-700 dark:text-gray-400">Link</span>
+        <input
+          class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+          placeholder="https://"
+          name="link"
+          type="url"
+          value="{{ old('link') ?? $qf->link }}"
+        />
+        @error('link')
+          <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
+        @enderror
+      </label>
       <div class="flex mt-3">
         <button class="px-4 py-2 mr-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" type="submit">
           Save

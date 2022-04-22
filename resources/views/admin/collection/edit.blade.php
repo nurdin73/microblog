@@ -1,5 +1,10 @@
 @extends('admin.template.main')
 @section('title', 'Edit Collection')
+
+@section('css')
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endsection
+
 @section('content')
   <div class="container px-6 mx-auto grid">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
@@ -23,11 +28,9 @@
         <select
           class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
           name="collection_id"
+          id="collection_id"
         >
           <option value="">Choose</option>
-          @foreach ($shopify_collections as $sc)
-            <option value="{{ $sc->id }}" @if($collection->collection_id == $sc->id) selected @endif>{{ $sc->title }}</option>
-          @endforeach
         </select>
         @error('collection_id')
           <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
@@ -67,4 +70,39 @@
       </div>
     </form>
   </div>    
+@endsection
+
+@section('js')
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script>
+    var collection = new Option('{{ $detail_shopify['title'] }}', '{{ $detail_shopify['id'] }}', true, true)
+    $("#collection_id").append(collection).trigger('change')
+    $("#collection_id").trigger({
+      type: 'select2:select',
+      params: {
+        search : '{{ $detail_shopify['title'] }}'
+      }
+    })
+    $('#collection_id').select2({
+      placeholder: "Choose collection",
+      ajax: {
+        url: '{{ route('admin.get-collection-shopify') }}',
+        data: function(params) {
+          return {
+            search: params.term,
+          }
+        },
+        processResults: function(data) {
+          return {
+            results: data.map(result => {
+              return {
+                id: result.id,
+                text: result.title,
+              }
+            })
+          }
+        }
+      }
+    })
+  </script>
 @endsection

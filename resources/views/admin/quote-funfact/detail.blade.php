@@ -16,7 +16,7 @@
     </h2>
     <span class="inline-block mb-6 dark:text-gray-200 text-gray-700 text-xs">Published at {{ \Carbon\Carbon::parse($qf->published_at)->format('d F Y') }}</span>
     <div class="flex justify-center flex-col">
-      <h2 class="font-semibold text-purple-600 text-lg">{{ $qf->title }}</h2>
+      <a href="{{ $qf->link }}" class="font-semibold text-purple-600 text-lg">{{ $qf->title }}</a>
       <div class="mb-4">
         <svg
           aria-hidden="true"

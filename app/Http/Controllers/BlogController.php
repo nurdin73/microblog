@@ -140,19 +140,6 @@ class BlogController extends Controller
         DB::beginTransaction();
         try {
             $blog = $this->blogRepository->update($data, $id);
-            if($request->hasFile('photos')) {
-                $photos = $request->file('photos');
-                $this->blogRepository->clearPhoto($blog->id);
-                foreach ($photos as $photo) {
-                    $filename = $this->saveImage($photo, 'blog/', 640, 320);
-                    if($filename) {
-                        $this->blogRepository->syncPhoto($filename, $blog->id);
-                    } else {
-                        DB::rollBack();
-                        return redirect()->back()->with('error', 'Failed to upload photo');
-                    }
-                }
-            }
             if($request->has('tags')) {
                 $tags = $request->input('tags');
                 foreach ($tags as $tag) {
@@ -178,5 +165,37 @@ class BlogController extends Controller
         $this->blogRepository->clearPhoto($id);
         $delete = $this->blogRepository->delete($id);
         return redirect()->route('admin.blogs.index')->with('success', 'Blog deleted successfully');
+    }
+
+    public function imageUpload(Request $request)
+    {
+        $this->validate($request, [
+            'blog_id' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        $image = $request->file('image');
+        $filename = $this->saveImage($image, 'blog/');
+        if($filename) {
+            $this->blogRepository->imageUpload($filename, $request->input('blog_id'));
+            return redirect()->back()->with('success', 'Image uploaded successfully');
+        } else {
+            return redirect()->back()->with('error', 'Failed to upload image');
+        }
+    }
+
+    public function imageDelete($id)
+    {
+        $this->blogRepository->deletePhoto($id);
+        return redirect()->back()->with('success', 'Image deleted successfully');
+    }
+
+    public function changeImagePosition(Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required',
+            'position' => 'required',
+        ]);
+        $this->blogRepository->changeImagePosition($request->input('id'), $request->input('position'));
+        return response()->json(['message' => 'Image position changed successfully']);
     }
 }

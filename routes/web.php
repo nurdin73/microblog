@@ -30,11 +30,15 @@ Auth::routes([
 Route::group(['middleware' => 'auth', 'as' => 'admin.'], function () {
     Route::get('/', HomeController::class)->name('home');
     Route::resource('blogs', BlogController::class);
+    Route::post('/image-upload', [BlogController::class, 'imageUpload'])->name('image-upload');
+    Route::put('/change-image-position', [BlogController::class, 'changeImagePosition'])->name('change-image-position');
+    Route::delete('/image-delete/{id}', [BlogController::class, 'imageDelete'])->name('image-delete');
     Route::resource('quote-funfacts', QuoteFunfactController::class);
     Route::resource('collections', CollectionController::class)->except(['create']);
     Route::group(['prefix' => 'master', 'as' => 'master.'], function () {
         Route::resource('tags', TagController::class)->except(['create', 'edit']);
     });
+    Route::get('/get-collection-shopify', [CollectionController::class, 'getCollectionShopify'])->name('get-collection-shopify');
     Route::get('/change-password', [ProfileController::class, 'changePassword'])->name('change-password');
     Route::post('/change-password', [ProfileController::class, 'updatePassword'])->name('change-password.update');
 });

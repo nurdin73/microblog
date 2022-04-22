@@ -40,7 +40,7 @@ class QuoteFunfactController extends Controller
     {
         $limit = request()->query('limit', '');
         $data = $this->quoteFunfactRepository->random($limit);
-        if(count($data) == 0) return response(['message' => 'Quote funfact not found'], 404);
+        if($data->count() == 0) return response(['message' => 'Quote funfact not found'], 404);
         return response(QuoteResource::collection($data), 200);
     }
 
@@ -72,6 +72,7 @@ class QuoteFunfactController extends Controller
         ]);
         DB::beginTransaction();
         try {
+            $data['link'] = $request->input('link');
             $data['slug'] = Str::slug($data['title']);
             $quote_funfact = $this->quoteFunfactRepository->add($data);
             if ($request->has('tags')) {
@@ -131,6 +132,7 @@ class QuoteFunfactController extends Controller
         ]);
         DB::beginTransaction();
         try {
+            $data['link'] = $request->input('link');
             $data['slug'] = Str::slug($data['title']);
             $quote_funfact = $this->quoteFunfactRepository->update($data, $id);
             if ($request->has('tags')) {
