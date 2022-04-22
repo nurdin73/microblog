@@ -114,24 +114,25 @@ class BlogRepository implements BlogInterface
   public function syncLikeUnlike(Int $blog_id, String $customer_id)
   {
     $blog = Blog::findOrFail($blog_id);
-    $checkCustomer = $this->getCustomer($customer_id);
+    $type = 'graphql';
+    $checkCustomer = $this->getCustomer($customer_id, $type);
     if(!$checkCustomer) return false;
-    $check = $blog->likes()->where('customer_id', $customer_id)->first();
+    $check = $blog->likes()->where('customer_id', $type == 'graphql' ? $checkCustomer : $customer_id)->first();
     if ($check) {
       if($check->status) {
-        $blog->likes()->where('customer_id', $customer_id)->update([
+        $blog->likes()->where('customer_id', $type == 'graphql' ? $checkCustomer : $customer_id)->update([
           'status' => false
         ]);
         $message = "Blog $blog->title has been disliked";
       } else {
-        $blog->likes()->where('customer_id', $customer_id)->update([
+        $blog->likes()->where('customer_id', $type == 'graphql' ? $checkCustomer : $customer_id)->update([
           'status' => true
         ]);
         $message = "Blog $blog->title has been liked";
       }
     } else {
       $blog->likes()->create([
-        'customer_id' => $customer_id,
+        'customer_id' => $type == 'graphql' ? $checkCustomer : $customer_id,
         'blog_id' => $blog_id,
         'status' => true
       ]);

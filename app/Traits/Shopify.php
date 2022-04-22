@@ -63,6 +63,12 @@ trait Shopify
     }
   }
 
+  /**
+   * Get customer by id or access token
+   * @param  String $id
+   * @return Object
+   */
+
   public function getCustomer($id, $type = 'rest')
   {
     if($type == 'rest') {
@@ -72,10 +78,28 @@ trait Shopify
       } catch (\Exception $e) {
         return false;
       }
+    } else {
+      $query = "
+        query {
+          customer(customerAccessToken: \"$id\") {
+            id
+          }
+        }
+      ";
+      $response = $this->getWithGraphQl($query);
+      if(isset($response['errors'])) {
+        return false;
+      } else {
+        if($response['data']['customer'] != null) {
+          return $response['data']['customer']['id'];
+        } else {
+          return false;
+        }
+      }
     }
   }
 
-  public function getAllCollections($type = 'rest')
+  public function getAllCollections($type = 'rest', $searchQuery = '', $limit = 10)
   {
     if($type == 'rest') {
       $url = "custom_collections.json";
@@ -87,7 +111,7 @@ trait Shopify
     } else {
       $query = "
         query {
-          collections(first:250) {
+          collections(first:$limit, query:\"{$searchQuery}\") {
             nodes {
               id,
               title,
@@ -116,15 +140,13 @@ trait Shopify
         return false;
       }
     } else {
-      $query = '
+      $query = "
         query {
-          collection(id: '. $id .') {
-            node {
-              id,
-              title,
-            }
+          collection(id: \"{$id}\") {
+            id,
+            title,
           }
-        }';
+        }";
       $response = $this->getWithGraphQl($query);
       return $response;
     }
