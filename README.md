@@ -45,6 +45,7 @@ composer install
   SHOPIFY_ACCESS_TOKEN=
   SHOPIFY_STORE_NAME=
   SHOPIFY_API_VERSION=
+  SHOPIFY_API_TYPE=storefront_api
 ```
 
 * Generate the key
