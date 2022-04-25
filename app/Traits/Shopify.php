@@ -76,7 +76,7 @@ trait Shopify
     if($typeApi == 'admin_api') {
       $url = "customers/$id.json";
       try {
-        return $this->req($url)->customer;
+        return $this->req($url)->customer->id;
       } catch (\Exception $e) {
         return false;
       }
@@ -93,7 +93,8 @@ trait Shopify
         return false;
       } else {
         if($response['data']['customer'] != null) {
-          return $response['data']['customer']['id'];
+          $customerId = explode('/', $response['data']['customer']['id']);
+          return $customerId[count($customerId) - 1];
         } else {
           return false;
         }
@@ -109,6 +110,7 @@ trait Shopify
       try {
         return $this->req($url)->custom_collections;
       } catch (\Exception $e) {
+        Log::error($e->getMessage());
         return false;
       }
     } else {
@@ -128,8 +130,15 @@ trait Shopify
           }
         }";
       $response = $this->getWithGraphQl($query);
-      
-      return $response;
+      if(isset($response['errors'])) {
+        return false;
+      } else {
+        if($response['data']['collections']['nodes'] != null) {
+          return $response['data']['collections']['nodes'];
+        } else {
+          return false;
+        }
+      }
     }
   }
 

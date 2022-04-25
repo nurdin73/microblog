@@ -130,10 +130,10 @@ class CollectionController extends Controller
         $search = request()->query('search', '');
         $limit = request()->query('limit', 10);
         $data = $this->getAllCollections($search, $limit);
-        if(isset($data['errors'])) {
-            return response()->json(['message' => $data['errors'][0]['message']], 500);
+        if(!$data) {
+            return response()->json(['message' => 'Collection not loaded'], 500);
         } else {
-            return response()->json($data['data']['collections']['nodes'], 200);
+            return response()->json($data, 200);
         }
     }
 }

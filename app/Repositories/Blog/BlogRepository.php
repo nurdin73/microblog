@@ -62,7 +62,8 @@ class BlogRepository implements BlogInterface
     }])->where('id', $id)->where('status', 'published')->first();
     if (!$blog) return false;
     if ($customer_id != '') {
-      Log::info("masuk sini");
+      $customer_id = explode('/', $customer_id);
+      $customer_id = $customer_id[count($customer_id) - 1];
       $blog->setRelation('likes', $blog->likes()->where('customer_id', $customer_id)->first());
     }
     return $blog;
