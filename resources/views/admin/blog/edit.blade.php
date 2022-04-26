@@ -229,7 +229,6 @@
       let idStart;
       let dragHtml;
       const listItems = document.querySelectorAll('.image-list');
-      console.log(listItems);
       function dragStart() {
         dragStartIndex = this.closest('.image-list').getAttribute('data-order');
         idStart = this.closest('.image-list').getAttribute('data-id');
