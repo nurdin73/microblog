@@ -54,6 +54,7 @@
               <th class="px-4 py-3 text-center">No</th>
               <th class="px-4 py-3">Title</th>
               <th class="px-4 py-3 text-center">Status</th>
+              <th class="px-4 py-3 text-center">Likes</th>
               <th class="px-4 py-3 text-center">Created At</th>
               <th class="px-4 py-3 text-center">Actions</th>
             </tr>
@@ -80,6 +81,9 @@
                       {{ $b->status }}
                     </span>
                   @endif
+                </td>
+                <td class="px-4 py-3 text-sm text-center">
+                  {{ $b->likes_count }}
                 </td>
                 <td class="px-4 py-3 text-sm text-center">
                   {{ $b->created_at->format('d F Y') }}

@@ -22,7 +22,7 @@ class TagController extends Controller
     {
         $search = request()->query('search', '');
         $limit = request()->query('limit', 10);
-        $by = request()->query('by', 'created_at');
+        $by = request()->query('by', 'updated_at');
         $order = request()->query('order', 'desc');
         $data['tags'] = $this->tagRepository->paginate($search, $limit, $by, $order);
         $data['search'] = $search;
@@ -42,6 +42,10 @@ class TagController extends Controller
             'name' => 'required|max:255',
         ]);
         $data['slug'] = Str::slug($data['name']);
+        $check = $this->tagRepository->find('name', $data['name']);
+        if ($check) {
+            return redirect()->back()->with('error', 'Tag already exists');
+        }
         $store = $this->tagRepository->add($data);
         return redirect()->route('admin.master.tags.index')->with('success', 'Create tags successfully');
     }

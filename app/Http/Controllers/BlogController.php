@@ -32,7 +32,7 @@ class BlogController extends Controller
         $limit = request()->query('limit', 10);
         $by = request()->query('by', 'created_at');
         $order = request()->query('order', 'desc');
-        $data['blogs'] = $this->blogRepository->all($search, $limit, $by, $order);
+        $data['blogs'] = $this->blogRepository->all($search, $limit, $by, $order, '', 'likes') ;
         $data['search'] = $search;
         $data['limit'] = $limit;
         $data['by'] = $by;
