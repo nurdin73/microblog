@@ -81,7 +81,7 @@
             if(filter_var($photo->src, FILTER_VALIDATE_URL)) {
                 $image = $photo->src;
             } else {
-                $image = asset('storage/'.$photo->src);
+                $image = asset('storage'.$photo->src);
             }
           @endphp
           <div class="grid-cols-1 relative image-list" data-order="{{ $photo->position }}" data-id="{{ $photo->id }}">
