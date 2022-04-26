@@ -40,7 +40,7 @@ class QuoteFunfactController extends Controller
     {
         $limit = request()->query('limit', '');
         $data = $this->quoteFunfactRepository->random($limit);
-        if($data->count() == 0) return response(['message' => 'Quote funfact not found'], 404);
+        if ($data->count() == 0) return response(['message' => 'Blog link not found'], 404);
         return response(QuoteResource::collection($data), 200);
     }
 
@@ -82,10 +82,10 @@ class QuoteFunfactController extends Controller
                 }
             }
             DB::commit();
-            return redirect()->route('admin.quote-funfacts.index')->with('success', 'Quote Funfact created successfully.');
+            return redirect()->route('admin.quote-funfacts.index')->with('success', 'Blog link created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('admin.quote-funfacts.index')->with('error', 'Quote Funfact creation failed.');
+            return redirect()->route('admin.quote-funfacts.index')->with('error', 'Blog link creation failed.');
         }
     }
 
@@ -142,7 +142,7 @@ class QuoteFunfactController extends Controller
                 }
             }
             DB::commit();
-            return redirect()->route('admin.quote-funfacts.index')->with('success', 'Quote Funfact updated successfully.');
+            return redirect()->route('admin.quote-funfacts.index')->with('success', 'Blog link updated successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
@@ -158,6 +158,6 @@ class QuoteFunfactController extends Controller
     public function destroy($id)
     {
         $delete = $this->quoteFunfactRepository->delete($id);
-        return redirect()->route('admin.quote-funfacts.index')->with('success', 'Quote Funfact deleted successfully');
+        return redirect()->route('admin.quote-funfacts.index')->with('success', 'Blog link deleted successfully');
     }
 }

@@ -57,7 +57,7 @@
     @endif
     <ul class="flex items-center justify-start space-x-3 my-3">
       @foreach ($blog->tags as $tag)
-      <li class="cursor-pointer text-purple-900 px-2 rounded bg-purple-500 hover:bg-purple-600 hover:text-purple-100 transition duration-500">
+      <li class="cursor-pointer text-green-900 px-2 rounded bg-green-500 hover:bg-green-700 hover:text-green-100 transition duration-500">
         <span>{{ Str::limit($tag->name, 20) }}</span>
       </li>
       @endforeach

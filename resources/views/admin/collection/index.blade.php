@@ -11,12 +11,12 @@
       <h2 class=" text-2xl font-semibold text-gray-700 dark:text-gray-200">
         Collections
       </h2>
-      <button type="button" class="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-sm leading-tight rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out" data-bs-toggle="modal" data-bs-target="#exampleModalCenteredScrollable">
+      <button type="button" class="inline-block px-6 py-2.5 bg-green-700 text-white font-medium text-sm leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out" data-bs-toggle="modal" data-bs-target="#exampleModalCenteredScrollable">
         New Collection
       </button>
     </div>
     @if (session('success'))
-      <div class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
+      <div class="flex items-center justify-between p-4 mb-9 mt-3 text-sm font-semibold text-green-100 bg-green-700 rounded-lg shadow-md focus:outline-none focus:shadow-outline-green">
         <div class="flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -26,7 +26,7 @@
       </div>
     @endif
     @if (session('error'))
-      <div class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-red-100 bg-red-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-red">
+      <div class="flex items-center justify-between p-4 mb-9 mt-3 text-sm font-semibold text-red-100 bg-red-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-red">
         <div class="flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -37,17 +37,17 @@
     @endif
     <div class="flex justify-between align-center mb-4">
       <label class="block text-sm w-24">
-        <select onchange="limitItem()" id="limit" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+        <select onchange="limitItem()" id="limit" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:focus:shadow-outline-gray">
           <option value="10" @if($limit == 10) selected @endif>10</option>
           <option value="25" @if($limit == 25) selected @endif>25</option>
           <option value="50" @if($limit == 50) selected @endif>50</option>
           <option value="100" @if($limit == 100) selected @endif>100</option>
         </select>
       </label>
-      <form method="GET" action="{{ route('admin.collections.index') }}">
-        <div class="relative text-gray-500 focus-within:text-purple-600">
+      {{--  <form method="GET" action="{{ route('admin.collections.index') }}">
+        <div class="relative text-gray-500 focus-within:text-green-700">
           <input
-            class="block w-full pr-20 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+            class="block w-full pr-20 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:focus:shadow-outline-gray form-input"
             placeholder="Search by title"
             name="search"
             id="search"
@@ -55,11 +55,11 @@
           />
           <input type="hidden" name="limit" value="{{ $limit }}">
           <input type="hidden" name="page" value="{{ request()->page ?? 1 }}">
-          <button type="submit" class="absolute inset-y-0 right-0 px-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-r-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+          <button type="submit" class="absolute inset-y-0 right-0 px-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-700 border border-transparent rounded-r-md active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
             Search
           </button>
         </div>
-      </form>
+      </form>  --}}
     </div>
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
       <div class="w-full overflow-x-auto">
@@ -69,8 +69,7 @@
               class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
             >
               <th class="px-4 py-3 text-center">No</th>
-              <th class="px-4 py-3">Title</th>
-              <th class="px-4 py-3 text-center">Status</th>
+              <th class="px-4 py-3">Name Collection</th>
               <th class="px-4 py-3 text-center">Created At</th>
               <th class="px-4 py-3 text-center">Actions</th>
             </tr>
@@ -85,25 +84,15 @@
                   {{ $no++ }}
                 </td>
                 <td class="px-4 py-3 text-sm ">
-                  <span class="text-purple-600 dark:text-gray-200 block">{{ \Str::limit($c->title, 60) }}</span>
-                  <small class="text-purple-600 dark:text-gray-200 block text-xs">{{ \Str::limit($c->caption, 60) }}</small>
-                </td>
-                <td class="px-4 py-3 text-xs text-center">
-                  @if($c->is_active == 1)
-                    <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                      Published
-                    </span>
-                  @else
-                    <span class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
-                      Draft
-                    </span>
-                  @endif
+                  {{ \Str::limit($c->title, 60) }}
+                  {{--  <span class="text-green-700 dark:text-gray-200 block">{{ \Str::limit($c->title, 60) }}</span>  --}}
+                  {{--  <small class="text-green-700 dark:text-gray-200 block text-xs">{{ \Str::limit($c->caption, 60) }}</small>  --}}
                 </td>
                 <td class="px-4 py-3 text-sm text-center">
                   {{ $c->created_at->format('d F Y') }}
                 </td>
                 <td class="px-4 py-3 text-sm text-center flex align-center justify-center">
-                  <a href="{{ route('admin.collections.edit', ['collection' => $c->id]) }}" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                  <a href="{{ route('admin.collections.edit', ['collection' => $c->id]) }}" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-700 border border-transparent rounded-md active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
                     Edit
                   </a>
                   <form action="{{ route('admin.collections.destroy', $c->id) }}" method="post" class="deleteItem">
@@ -142,7 +131,7 @@
 @section('modal')
   <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto" id="exampleModalCenteredScrollable" aria-labelledby="exampleModalCenteredScrollable" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable relative w-auto pointer-events-none">
-      <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray bg-clip-padding rounded-md outline-none text-current">
+      <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:focus:shadow-outline-gray bg-clip-padding rounded-md outline-none text-current">
         <div class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800 rounded-t-md">
           <h5 class="text-xl font-medium leading-normal text-gray-700 dark:text-gray-200" id="exampleModalCenteredScrollableLabel">
             Add Collection
@@ -157,7 +146,7 @@
             <label class="block text-sm mb-2">
               <span class="text-gray-700 dark:text-gray-400">Collection</span>
               <select
-                {{-- class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" --}}
+                {{-- class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:focus:shadow-outline-gray" --}}
                 name="collection_id"
                 id="collection_id"
                 style="width: 100%"
@@ -167,37 +156,37 @@
                 @endforeach --}}
               </select>
               @error('collection_id')
-                <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
+                <small class="text-xs text-gray-600 dark:text-green-700 italic">{{ $message }}</small>
               @enderror
             </label>
             <label class="block text-sm mb-2">
               <span class="text-gray-700 dark:text-gray-400">Title</span>
               <input
-                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                 placeholder="Jane Doe"
                 name="title"
                 value="{{ old('title') }}"
               />
               @error('title')
-                <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
+                <small class="text-xs text-gray-600 dark:text-green-700 italic">{{ $message }}</small>
               @enderror
             </label>
             <label class="block text-sm">
               <span class="text-gray-700 dark:text-gray-400">Caption</span>
               <textarea
-                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:focus:shadow-outline-gray"
                 rows="3"
                 placeholder="Enter some long form caption."
                 name="caption"
               >{{ old('caption') }}</textarea>
               @error('caption')
-                <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
+                <small class="text-xs text-gray-600 dark:text-green-700 italic">{{ $message }}</small>
               @enderror
             </label>
           </div>
           <div class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 dark:border-gray-800 rounded-b-md">
             <button type="button"
-              class="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+              class="inline-block px-6 py-2.5 bg-green-700 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out"
               data-bs-dismiss="modal">
               Close
             </button>
@@ -249,7 +238,7 @@
         text: "You won't be able to revert this!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#2f8d03',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!'
       }).then((result) => {

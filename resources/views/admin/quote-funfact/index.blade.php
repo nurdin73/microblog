@@ -1,15 +1,15 @@
 @extends('admin.template.main')
-@section('title', 'Quote Funfacts')
+@section('title', 'Blog links')
 @section('content')
   <div class="container px-6 mx-auto grid">
     <div class="flex justify-between align-center my-6">
       <h2 class=" text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Quote Funfacts
+        Blog links
       </h2>
-      <a href="{{ route('admin.quote-funfacts.create') }}" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">New Quote/Funfact</a>
+      <a href="{{ route('admin.quote-funfacts.create') }}" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-700 border border-transparent rounded-md active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">New Blog Link</a>
     </div>
     @if (session('success'))
-      <div class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
+      <div class="flex items-center justify-between p-4 mb-9 mt-3 text-sm font-semibold text-green-100 bg-green-700 rounded-lg shadow-md focus:outline-none focus:shadow-outline-green">
         <div class="flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -20,7 +20,7 @@
     @endif
     <div class="flex justify-between align-center mb-4">
       <label class="block text-sm w-24">
-        <select onchange="limitItem()" id="limit" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+        <select onchange="limitItem()" id="limit" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:focus:shadow-outline-gray">
           <option value="10" @if($limit == 10) selected @endif>10</option>
           <option value="25" @if($limit == 25) selected @endif>25</option>
           <option value="50" @if($limit == 50) selected @endif>50</option>
@@ -28,9 +28,9 @@
         </select>
       </label>
       <form method="GET" action="{{ route('admin.quote-funfacts.index') }}">
-        <div class="relative text-gray-500 focus-within:text-purple-600">
+        <div class="relative text-gray-500 focus-within:text-green-700">
           <input
-            class="block w-full pr-20 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+            class="block w-full pr-20 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:focus:shadow-outline-gray form-input"
             placeholder="Search by title"
             name="search"
             id="search"
@@ -38,7 +38,7 @@
           />
           <input type="hidden" name="limit" value="{{ $limit }}">
           <input type="hidden" name="page" value="{{ request()->page ?? 1 }}">
-          <button type="submit" class="absolute inset-y-0 right-0 px-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-r-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+          <button type="submit" class="absolute inset-y-0 right-0 px-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-700 border border-transparent rounded-r-md active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
             Search
           </button>
         </div>
@@ -53,7 +53,6 @@
             >
               <th class="px-4 py-3 text-center">No</th>
               <th class="px-4 py-3">Title</th>
-              <th class="px-4 py-3 text-center">Type</th>
               <th class="px-4 py-3 text-center">Status</th>
               <th class="px-4 py-3 text-center">Published at</th>
               <th class="px-4 py-3 text-center">Created At</th>
@@ -70,18 +69,7 @@
                   {{ $no++}}
                 </td>
                 <td class="px-4 py-3 text-sm ">
-                  <a title="{{ $qf->title }}" href="{{ route('admin.quote-funfacts.show', ['quote_funfact' => $qf->id]) }}" class="text-purple-600 dark:text-gray-200 hover:underline">{{ \Str::limit($qf->title, 30) }}</a>
-                </td>
-                <td class="px-4 py-3 text-xs text-center">
-                  @if($qf->type == 'quote')
-                    <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-700 dark:text-yellow-100">
-                      {{ $qf->type }}
-                    </span>
-                  @else
-                    <span class="px-2 py-1 font-semibold leading-tight text-blue-700 bg-blue-100 rounded-full dark:text-white dark:bg-blue-600">
-                      {{ $qf->type }}
-                    </span>
-                  @endif
+                  <a title="{{ $qf->title }}" href="{{ route('admin.quote-funfacts.show', ['quote_funfact' => $qf->id]) }}" class="text-green-700 dark:text-gray-200 hover:underline">{{ \Str::limit($qf->title, 30) }}</a>
                 </td>
                 <td class="px-4 py-3 text-xs text-center">
                   @if($qf->status == 'published')
@@ -101,7 +89,7 @@
                   {{ $qf->created_at->format('d F Y') }}
                 </td>
                 <td class="px-4 py-3 text-sm text-center flex align-center justify-center">
-                  <a href="{{ route('admin.quote-funfacts.edit', ['quote_funfact' => $qf->id]) }}" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                  <a href="{{ route('admin.quote-funfacts.edit', ['quote_funfact' => $qf->id]) }}" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-700 border border-transparent rounded-md active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
                     Edit
                   </a>
                   <form action="{{ route('admin.quote-funfacts.destroy', $qf->id) }}" method="post" class="deleteItem">
@@ -114,7 +102,7 @@
             @empty
               <tr class="text-gray-700 dark:text-gray-400">
                 <td class="px-4 py-3 text-center" colspan="7">
-                  No quote/funfact found
+                  No blog link found
                 </td>
               </tr>
             @endforelse
@@ -173,7 +161,7 @@
         text: "You won't be able to revert this!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#2f8d03',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!'
       }).then((result) => {

@@ -29,8 +29,8 @@ class BlogRepository implements BlogInterface
             $query->where('status', true);
           }]);
         } else {
-          if($info == 'photos') {
-            $blogs = $blogs->with(['photos' => function($q) {
+          if ($info == 'photos') {
+            $blogs = $blogs->with(['photos' => function ($q) {
               $q->orderBy('position', 'asc');
             }]);
           } else {
@@ -45,7 +45,7 @@ class BlogRepository implements BlogInterface
 
   public function get($id, $status = '')
   {
-    $blog = Blog::where('id', $id)->with(['tags', 'photos' => function($q) {
+    $blog = Blog::where('id', $id)->with(['tags', 'photos' => function ($q) {
       $q->orderBy('position', 'asc');
     }]);
     if ($status != '') {
@@ -117,10 +117,10 @@ class BlogRepository implements BlogInterface
     $blog = Blog::findOrFail($blog_id);
     $type = config('shopify.type_api');
     $checkCustomer = $this->getCustomer($customer_id);
-    if(!$checkCustomer) return false;
+    if (!$checkCustomer) return false;
     $check = $blog->likes()->where('customer_id', $type == 'storefront_api' ? $checkCustomer : $customer_id)->first();
     if ($check) {
-      if($check->status) {
+      if ($check->status) {
         $blog->likes()->where('customer_id', $type == 'storefront_api' ? $checkCustomer : $customer_id)->update([
           'status' => false
         ]);
@@ -142,7 +142,7 @@ class BlogRepository implements BlogInterface
     return $message;
   }
 
-  public function total() : Int
+  public function total(): Int
   {
     return Blog::count();
   }
@@ -161,8 +161,17 @@ class BlogRepository implements BlogInterface
   public function deletePhoto(Int $id)
   {
     $photo = BlogPhoto::findOrFail($id);
+    $blogId = $photo->blog_id;
     $this->deleteImage($photo->src);
     $photo->delete();
+    $restructure = BlogPhoto::where('blog_id', $blogId)->orderBy('position', 'asc')->get();
+    $i = 1;
+    foreach ($restructure as $restructure) {
+      $restructure->update([
+        'position' => $i
+      ]);
+      $i++;
+    }
   }
 
   public function changeImagePosition(Int $id, Int $position)
