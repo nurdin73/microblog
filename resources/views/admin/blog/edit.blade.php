@@ -91,15 +91,11 @@
                 class="shadow-lg h-auto"
                 alt=""
               />
-              <form action="{{ route('admin.image-delete', $photo->id) }}" method="post" class="deleteImage">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="absolute top-0 right-0 px-1 py-1 mt-2 mr-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </form>
+              <button type="button" data-id="{{ $photo->id }}" class="absolute deleteImage top-0 right-0 px-1 py-1 mt-2 mr-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
           </div>
           @endforeach
@@ -191,9 +187,9 @@
         })
       })
 
-      $('.deleteImage').on('submit', function(e) {
+      $('.deleteImage').on('click', function(e) {
         e.preventDefault();
-        var form = $(this);
+        var id = $(this).data('id')
         Swal.fire({
           title: 'Are you sure?',
           text: "You won't be able to revert this!",
@@ -204,7 +200,22 @@
           confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
           if (result.isConfirmed) {
-            form.submit();
+            $.ajax({
+              type: "delete",
+              url: '{{ url('image-delete') }}' + '/' + id,
+              headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+              success: function (response) {
+                Swal.fire(
+                  'Deleted!',
+                  'Your file has been deleted.',
+                  'success'
+                ).then((result) => {
+                  window.location.reload()
+                })
+              }
+            });
           }
         });
       })

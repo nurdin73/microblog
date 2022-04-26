@@ -186,7 +186,10 @@ class BlogController extends Controller
     public function imageDelete($id)
     {
         $this->blogRepository->deletePhoto($id);
-        return redirect()->back()->with('success', 'Image deleted successfully');
+        return response([
+            'status' => 'success',
+            'message' => 'Image deleted successfully'
+        ]);
     }
 
     public function changeImagePosition(Request $request)
