@@ -229,6 +229,7 @@
       let idStart;
       let dragHtml;
       const listItems = document.querySelectorAll('.image-list');
+      console.log(listItems);
       function dragStart() {
         dragStartIndex = this.closest('.image-list').getAttribute('data-order');
         idStart = this.closest('.image-list').getAttribute('data-id');
@@ -240,19 +241,19 @@
       }
 
       function dragEnter() {
-          this.classList.add('is-dragging');
+          // this.classList.add('is-dragging');
       }
 
       function dragLeave() {
-        if (dragStartIndex == this.getAttribute('data-order')) {
-          listItems[dragStartIndex].classList.add('is-dragging');
-          if (beforeDropIndex && beforeDropIndex != this.getAttribute('data-order')) {
-            listItems[beforeDropIndex].classList.remove('is-dragging');
-          }
-        } else {
-          listItems[dragStartIndex].classList.remove('is-dragging');
-          listItems[this.getAttribute('data-order')].classList.add('is-dragging');
-        }
+        // if (dragStartIndex == this.getAttribute('data-order')) {
+        //   // listItems[dragStartIndex].classList.add('is-dragging');
+        //   if (beforeDropIndex && beforeDropIndex != this.getAttribute('data-order')) {
+        //     listItems[beforeDropIndex].classList.remove('is-dragging');
+        //   }
+        // } else {
+        //   // listItems[dragStartIndex].classList.remove('is-dragging');
+        //   listItems[this.getAttribute('data-order')].classList.add('is-dragging');
+        // }
         beforeDropIndex = this.getAttribute('data-order');
         // this.classList.add('is-dragging');
       }
@@ -260,8 +261,8 @@
       function dragDrop() {
         const dragEndIndex = this.getAttribute('data-order');
         const idEnd = this.getAttribute('data-id')
-        swapItem(dragStartIndex, dragEndIndex);
-        this.classList.remove('is-dragging');
+        swapItem(dragStartIndex - 1, dragEndIndex - 1);
+        // this.classList.remove('is-dragging');
         // disini endpointnya
         updatePosition(dragEndIndex, idStart)
         updatePosition(dragStartIndex, idEnd)
