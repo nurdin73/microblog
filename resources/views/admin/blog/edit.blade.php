@@ -100,7 +100,7 @@
           </div>
           @endforeach
           <label class="block text-sm">
-            <form action="{{ route('admin.image-upload') }}" method="post" enctype="multipart/form-data" id="formUpload">
+            {{-- <form action="{{ route('admin.image-upload') }}" method="post" enctype="multipart/form-data" id="formUpload">
               @csrf
               <div>
                 <label for="formFileMultiple" class="form-label text-gray-700 dark:text-gray-400">Photos</label>
@@ -109,18 +109,14 @@
                   <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
                 @enderror
               </div>
-              {{-- <input
-                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                placeholder="Jane Doe"
-                name="image"
-                type="file"
-                onchange="this.form.submit()"
-                accept="image/*"
-              />
+            </form> --}}
+            <div>
+              <label for="formFileMultiple" class="form-label text-gray-700 dark:text-gray-400">Photos</label>
+              <input name="image" accept="image/*" id="uploadImage" class="form-control block w-full px-3 py-1.5 text-base font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray" type="file" id="formFileMultiple" multiple>
               @error('image')
                 <small class="text-xs text-gray-600 dark:text-purple-600 italic">{{ $message }}</small>
-              @enderror --}}
-            </form>
+              @enderror
+            </div>
           </label>
         </div>
         <label class="block text-sm mt-3">
