@@ -23,7 +23,7 @@
               if(filter_var($val->src, FILTER_VALIDATE_URL)) {
                   $image = $val->src;
               } else {
-                  $image = asset('storage/'.$val->src);
+                  $image = asset('storage'.$val->src);
               }
             @endphp
             <div class="carousel-item @if($key == 0) active @endif relative float-left w-full">
