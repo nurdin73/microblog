@@ -1,5 +1,5 @@
 @extends('auth.template')
-@section('title', 'Login')
+@section('title', 'Forgot password')
 @section('content')
   <div class="w-full">
     <form action="{{ route('password.email') }}" method="post">

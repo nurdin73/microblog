@@ -1,5 +1,5 @@
 @extends('auth.template')
-@section('title', 'Login')
+@section('title', 'Reset password')
 @section('content')
   <div class="w-full">
     @if (session('status'))
