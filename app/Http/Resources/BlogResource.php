@@ -33,7 +33,11 @@ class BlogResource extends JsonResource
         $data['total_like'] = $this->when(isset($this->likes_count), $this->likes_count);
         $data['liked'] = $this->whenLoaded('likes', function() {
             if($this->likes) {
-                return true;
+                if($this->likes->status == 1) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
             return false;
         }) ?? false;
