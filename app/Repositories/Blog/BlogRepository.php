@@ -60,10 +60,12 @@ class BlogRepository implements BlogInterface
     $blog = Blog::with(['tags', 'photos'])->withCount(['likes' => function ($query) {
       $query->where('status', true);
     }])->where('id', $id)->where('status', 'published')->first();
+    $type = config('shopify.type_api');
     if (!$blog) return false;
     if ($customer_id != '') {
-      $customer_id = explode('/', $customer_id);
-      $customer_id = $customer_id[count($customer_id) - 1];
+      $checkCustomer = $this->getCustomer($customer_id);
+      if (!$checkCustomer) return false;
+      $customer_id = $type == 'storefront_api' ? $checkCustomer : $customer_id;
       $blog->setRelation('likes', $blog->likes()->where('customer_id', $customer_id)->first());
     }
     return $blog;
