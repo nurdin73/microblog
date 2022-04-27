@@ -64,9 +64,11 @@ class BlogRepository implements BlogInterface
     if (!$blog) return false;
     if ($customer_id != '') {
       $checkCustomer = $this->getCustomer($customer_id);
-      if (!$checkCustomer) return false;
-      $customer_id = $type == 'storefront_api' ? $checkCustomer : $customer_id;
-      $blog->setRelation('likes', $blog->likes()->where('customer_id', $customer_id)->first());
+      if ($checkCustomer) {
+        $customer_id = $type == 'storefront_api' ? $checkCustomer : $customer_id;
+        $blog->setRelation('likes', $blog->likes()->where('customer_id', $customer_id)->first());
+      }
+      
     }
     return $blog;
   }
