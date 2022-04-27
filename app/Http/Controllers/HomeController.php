@@ -21,8 +21,7 @@ class HomeController extends Controller
     public function __invoke()
     {
         $data['blog_total'] = $this->blogRepository->total();
-        $data['quote_total'] = $this->quoteFunfactRepository->total();
-        $data['funfact_total'] = $this->quoteFunfactRepository->total('funfact');
+        $data['blogLinkTotal'] = $this->quoteFunfactRepository->total('all');
         $data['collection_total'] = $this->collectionRepository->total();
         return view('admin.index', $data);
     }

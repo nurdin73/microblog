@@ -22,7 +22,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>{{ session('error') }}</span>
+          <span class="ml-1">{{ session('error') }}</span>
         </div>
       </div>
     @endif
@@ -32,7 +32,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>{{ session('success') }}</span>
+          <span class="ml-1">{{ session('success') }}</span>
         </div>
       </div>
     @endif
@@ -64,9 +64,9 @@
             </select>
           </label>
         </div>
-        <label class="block text-sm">
+        <label for="" class="block text-sm">
           <span class="text-gray-700 dark:text-gray-400">Content</span>
-          <div id="content" class="block w-full mt-3 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:focus:shadow-outline-gray">
+          <div id="editor" class="w-full mt-3 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700">
             {!! old('content') ?? $blog->content !!}
           </div>
           <input type="hidden" name="content" value="{!! old('content') ?? $blog->content !!}" id="field-content">
@@ -156,7 +156,7 @@
   <script>
     $(document).ready(function() {
       $('#select2').select2();
-      var quill = new Quill('#content', {
+      var quill = new Quill('#editor', {
         theme: 'snow'
       });
       quill.on('text-change', function(delta, oldDelta, source) {

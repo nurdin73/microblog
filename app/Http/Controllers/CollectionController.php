@@ -57,6 +57,11 @@ class CollectionController extends Controller
         ]);
 
         try {
+            $collection = $this->getCollection($data['collection_id']);
+            if(isset($collection['errors'])) {
+                return redirect()->back()->with('error', "collection not valid");
+            }
+            $data['name'] = $collection['data']['collection']['title'];
             $add = $this->collectionRepository->add($data);
             return redirect()->route('admin.collections.index')->with('success', 'Collection added successfully');
         } catch (\Exception $e) {
