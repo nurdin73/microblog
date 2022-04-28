@@ -2,7 +2,7 @@
 @section('title', 'Add New Blog')
 @section('css')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />   
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    {{-- <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"> --}}
 @endsection
 @section('content')
 <div class="container px-6 mx-auto grid">
@@ -95,16 +95,24 @@
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    {{-- <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.25.1/trumbowyg.min.js" integrity="sha512-t4CFex/T+ioTF5y0QZnCY9r5fkE8bMf9uoNH2HNSwsiTaMQMO0C9KbKPMvwWNdVaEO51nDL3pAzg4ydjWXaqbg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.25.1/ui/trumbowyg.min.css" integrity="sha512-nwpMzLYxfwDnu68Rt9PqLqgVtHkIJxEPrlu3PfTfLQKVgBAlTKDmim1JvCGNyNRtyvCx1nNIVBfYm8UZotWd4Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Initialize Quill editor -->
     <script>
         $('#select2').select2();
-        var quill = new Quill('#editor', {
-            theme: 'snow'
+        // var quill = new Quill('#editor', {
+        //     theme: 'snow'
+        // });
+        // quill.on('text-change', function(delta, oldDelta, source) {
+        //     $('#field-content').val(quill.root.innerHTML);
+        // });
+        $('#editor').trumbowyg().on('tbwchange', function(e) {
+          $('#field-content').val(e.target.innerHTML);
         });
-        quill.on('text-change', function(delta, oldDelta, source) {
-            $('#field-content').val(quill.root.innerHTML);
-        });
+        // Set HTML content
+        $('#editor').trumbowyg('html', "{!! old('content') !!}");
+
     </script>
 @endsection

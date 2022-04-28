@@ -7,9 +7,9 @@
 @section('content')
 <div class="container px-6 mx-auto grid">
     <h2 class="mt-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-      New Blog
+      Update Blog Link
     </h2>
-    <span class="block text-gray-700 dark:text-gray-200 text-sm mb-6">Add new blog post</span>
+    <span class="block text-gray-700 dark:text-gray-200 text-sm mb-6">Update blog link</span>
     @if (session('error'))
       <div class="flex items-center justify-between p-4 mb-9 mt-3 text-sm font-semibold text-red-100 bg-red-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-red">
         <div class="flex items-center">
@@ -118,16 +118,24 @@
 
 @section('js')
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  {{-- <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script> --}}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.25.1/trumbowyg.min.js" integrity="sha512-t4CFex/T+ioTF5y0QZnCY9r5fkE8bMf9uoNH2HNSwsiTaMQMO0C9KbKPMvwWNdVaEO51nDL3pAzg4ydjWXaqbg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.25.1/ui/trumbowyg.min.css" integrity="sha512-nwpMzLYxfwDnu68Rt9PqLqgVtHkIJxEPrlu3PfTfLQKVgBAlTKDmim1JvCGNyNRtyvCx1nNIVBfYm8UZotWd4Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 
   <!-- Initialize Quill editor -->
   <script>
     $('#select2').select2();
-    var quill = new Quill('#editor', {
-      theme: 'snow'
+    // var quill = new Quill('#editor', {
+    //   theme: 'snow'
+    // });
+    // quill.on('text-change', function(delta, oldDelta, source) {
+    //   $('#field-content').val(quill.root.innerHTML);
+    // });
+    $('#editor').trumbowyg().on('tbwchange', function(e) {
+      $('#field-content').val(e.target.innerHTML);
     });
-    quill.on('text-change', function(delta, oldDelta, source) {
-      $('#field-content').val(quill.root.innerHTML);
-    });
+    // Set HTML content
+    $('#editor').trumbowyg('html', "{!! old('content') ?? $qf->content !!}");
   </script>
 @endsection
