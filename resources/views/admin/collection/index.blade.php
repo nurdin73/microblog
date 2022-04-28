@@ -70,7 +70,7 @@
             >
               <th class="px-4 py-3 text-center">No</th>
               <th class="px-4 py-3">Title</th>
-              <th class="px-4 py-3 text-center">Name Collection</th>
+              <th class="px-4 py-3 text-center">Collection</th>
               <th class="px-4 py-3 text-center">Created At</th>
               <th class="px-4 py-3 text-center">Actions</th>
             </tr>
