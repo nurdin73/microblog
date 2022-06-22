@@ -21,7 +21,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>{{ session('success') }}</span>
+          <span class="ml-1">{{ session('success') }}</span>
         </div>
       </div>
     @endif
@@ -31,7 +31,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>{{ session('error') }}</span>
+          <span class="ml-1">{{ session('error') }}</span>
         </div>
       </div>
     @endif
@@ -69,7 +69,8 @@
               class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
             >
               <th class="px-4 py-3 text-center">No</th>
-              <th class="px-4 py-3">Name Collection</th>
+              <th class="px-4 py-3">Title</th>
+              <th class="px-4 py-3 text-center">Collection</th>
               <th class="px-4 py-3 text-center">Created At</th>
               <th class="px-4 py-3 text-center">Actions</th>
             </tr>
@@ -84,9 +85,11 @@
                   {{ $no++ }}
                 </td>
                 <td class="px-4 py-3 text-sm ">
-                  {{ \Str::limit($c->title, 60) }}
-                  {{--  <span class="text-green-700 dark:text-gray-200 block">{{ \Str::limit($c->title, 60) }}</span>  --}}
-                  {{--  <small class="text-green-700 dark:text-gray-200 block text-xs">{{ \Str::limit($c->caption, 60) }}</small>  --}}
+                  <span class="text-green-700 dark:text-gray-200 block">{{ \Str::limit($c->title, 60) }}</span> 
+                  <small class="text-green-700 dark:text-gray-200 block text-xs">{{ \Str::limit($c->caption, 60) }}</small> 
+                </td>
+                <td class="px-4 py-3 text-sm text-center">
+                  {{ $c->name ?? '-' }}
                 </td>
                 <td class="px-4 py-3 text-sm text-center">
                   {{ $c->created_at->format('d F Y') }}

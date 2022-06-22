@@ -65,7 +65,6 @@ class QuoteFunfactController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|max:255',
-            'type' => 'required|in:quote,funfact',
             'content' => 'required',
             'status' => 'required|in:published,draft',
             'published_at' => 'required|date',
@@ -125,7 +124,6 @@ class QuoteFunfactController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|max:255',
-            'type' => 'required|max:255',
             'content' => 'required',
             'status' => 'required|max:255',
             'published_at' => 'required|date',

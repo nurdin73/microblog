@@ -1,15 +1,11 @@
 @extends('admin.template.main')
 @section('title', 'Add New Blog')
-
 @section('css')
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-  <!-- Theme included stylesheets -->
-  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />   
+    {{-- <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"> --}}
 @endsection
-
 @section('content')
-  <div class="container px-6 mx-auto grid">
+<div class="container px-6 mx-auto grid">
     <h2 class="mt-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
       New Blog
     </h2>
@@ -20,7 +16,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>{{ session('error') }}</span>
+          <span class="ml-1">{{ session('error') }}</span>
         </div>
       </div>
     @endif
@@ -49,10 +45,10 @@
             </select>
           </label>
         </div>
-        <label class="block text-sm">
+        <label for="" class="block text-sm">
           <span class="text-gray-700 dark:text-gray-400">Content</span>
-          <div id="content" class="block w-full mt-3 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:focus:shadow-outline-gray">
-            {!! old('content') !!} 
+          <div id="editor" class="w-full mt-3 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700">
+            {!! old('content') !!}
           </div>
           <input type="hidden" name="content" value="{!! old('content') !!}" id="field-content">
           @error('content')
@@ -67,19 +63,6 @@
               <small class="text-xs text-gray-600 dark:text-green-700 italic">{{ $message }}</small>
             @enderror
           </div>
-          {{-- <label class="block text-sm">
-            <span class="text-gray-700 dark:text-gray-400">Photos</span>
-            <input
-              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              placeholder="Jane Doe"
-              name="photos[]"
-              type="file"
-              multiple
-            />
-            @error('photos')
-              <small class="text-xs text-gray-600 dark:text-green-700 italic">{{ $message }}</small>
-            @enderror
-          </label> --}}
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">
               Status
@@ -110,20 +93,26 @@
   </div>    
 @endsection
 
-
 @section('js')
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-  <!-- Main Quill library -->
-  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-  <script>
-    $(document).ready(function() {
-      $('#select2').select2();
-      var quill = new Quill('#content', {
-        theme: 'snow',
-      });
-      quill.on('text-change', function(delta, oldDelta, source) {
-        $('#field-content').val(quill.root.innerHTML);
-      });
-    });
-  </script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    {{-- <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.25.1/trumbowyg.min.js" integrity="sha512-t4CFex/T+ioTF5y0QZnCY9r5fkE8bMf9uoNH2HNSwsiTaMQMO0C9KbKPMvwWNdVaEO51nDL3pAzg4ydjWXaqbg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.25.1/ui/trumbowyg.min.css" integrity="sha512-nwpMzLYxfwDnu68Rt9PqLqgVtHkIJxEPrlu3PfTfLQKVgBAlTKDmim1JvCGNyNRtyvCx1nNIVBfYm8UZotWd4Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Initialize Quill editor -->
+    <script>
+        $('#select2').select2();
+        // var quill = new Quill('#editor', {
+        //     theme: 'snow'
+        // });
+        // quill.on('text-change', function(delta, oldDelta, source) {
+        //     $('#field-content').val(quill.root.innerHTML);
+        // });
+        $('#editor').trumbowyg().on('tbwchange', function(e) {
+          $('#field-content').val(e.target.innerHTML);
+        });
+        // Set HTML content
+        $('#editor').trumbowyg('html', "{!! old('content') !!}");
+
+    </script>
 @endsection
