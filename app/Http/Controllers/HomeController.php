@@ -26,7 +26,7 @@ class HomeController extends Controller
         $data['blog_total'] = $this->blogRepository->total();
         $data['blogLinkTotal'] = $this->quoteFunfactRepository->total('all');
         $data['collection_total'] = $this->collectionRepository->total();
-        $data['api_token'] = ApiToken::where('user_id', auth()->id())->first()->sort_token;
+        $data['api_token'] = $this->getToken();
         return view('admin.index', $data);
     }
 }
