@@ -55,7 +55,7 @@
               <th class="px-4 py-3">Title</th>
               <th class="px-4 py-3 text-center">Status</th>
               <th class="px-4 py-3 text-center">Likes</th>
-              <th class="px-4 py-3 text-center">Created At</th>
+              <th class="px-4 py-3 text-center">Posted date</th>
               <th class="px-4 py-3 text-center">Actions</th>
             </tr>
           </thead>
@@ -86,7 +86,7 @@
                   {{ $b->likes_count }}
                 </td>
                 <td class="px-4 py-3 text-sm text-center">
-                  {{ $b->created_at->format('d F Y') }}
+                  {{ $b->posted_at ? \Carbon\Carbon::parse($b->posted_at)->format('d F Y') : '-' }}
                 </td>
                 <td class="px-4 py-3 text-sm text-center flex align-center justify-center">
                   <a href="{{ route('admin.blogs.edit', ['blog' => $b->id]) }}" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-700 border border-transparent rounded-md active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">

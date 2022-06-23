@@ -7,6 +7,7 @@ use App\Models\BlogPhoto;
 use App\Models\BlogTag;
 use App\Traits\ImageOptimize;
 use App\Traits\Shopify;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 
 class BlogRepository implements BlogInterface
@@ -68,7 +69,6 @@ class BlogRepository implements BlogInterface
         $customer_id = $type == 'storefront_api' ? $checkCustomer : $customer_id;
         $blog->setRelation('likes', $blog->likes()->where('customer_id', $customer_id)->first());
       }
-      
     }
     return $blog;
   }
@@ -183,5 +183,15 @@ class BlogRepository implements BlogInterface
     $photo = BlogPhoto::findOrFail($id);
     $photo->position = $position;
     $photo->save();
+  }
+
+  public function getAll(Int $limit = 10, $tag_id = null)
+  {
+    if ($tag_id) {
+      return Blog::whereHas('tags', function (Builder $q) use ($tag_id) {
+        $q->where('tags.id', $tag_id);
+      })->with('tags', 'photos')->get();
+    }
+    return Blog::take($limit)->with('tags', 'photos')->get();
   }
 }

@@ -65,5 +65,9 @@
         </div>
       </div>
     </div>
+    <div class="p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+      <h2 class="font-bold">API Token</h2>
+      <code class="break-words text-xs">{{ $api_token }}</code>
+    </div>
   </div>    
 @endsection

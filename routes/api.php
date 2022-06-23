@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\ApiBlogController;
+use App\Http\Controllers\ApiHolidayController;
+use App\Http\Controllers\ApiProfileController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\QuoteFunfactController;
-use Illuminate\Http\Request;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::get('/', function () {
     return response([
         'message' => 'Welcome to the API. this is base url for api',
@@ -84,12 +88,33 @@ Route::get('/', function () {
         ]
     ]);
 });
-Route::group(['prefix' => 'blogs'], function() {
-    Route::get('/', [ApiBlogController::class, 'blogs']);
-    Route::get('/detail/{id}', [ApiBlogController::class, 'detail']);
-    Route::post('/like-dislike', [ApiBlogController::class, 'likeUnlike']);
+Route::group(['middleware' => 'api_token'], function () {
+    Route::group(['prefix' => 'blogs'], function () {
+        Route::get('/', [ApiBlogController::class, 'blogs']);
+        Route::get('/latest-two-post', [ApiBlogController::class, 'getlatestTwoPost']);
+        Route::get('/latest-five-post', [ApiBlogController::class, 'getlatestFivePost']);
+        Route::get('/tag/{id}', [ApiBlogController::class, 'getByTag']);
+        Route::get('/detail/{id}', [ApiBlogController::class, 'detail']);
+        Route::post('/like-dislike', [ApiBlogController::class, 'likeUnlike']);
+    });
+
+    Route::group(['prefix' => 'profile'], function () {
+        Route::get('/', [ApiProfileController::class, 'get']);
+        Route::put('/', [ApiProfileController::class, 'updateOrCreate']);
+    });
+
+    Route::get('/quote-funfacts', [QuoteFunfactController::class, 'getRandomQuotesFunfacts']);
+
+    Route::get('/collections', [CollectionController::class, 'collections']);
+
+    Route::get('/holidays', ApiHolidayController::class);
 });
 
-Route::get('/quote-funfacts', [QuoteFunfactController::class, 'getRandomQuotesFunfacts']);
+Route::get('tes', function () {
+    $key = 'nakedpress';
+    $payload = [
+        'name' => 'nakedpress-token',
+    ];
 
-Route::get('/collections', [CollectionController::class, 'collections']);
+    return JWT::encode($payload, $key, 'HS256');
+});

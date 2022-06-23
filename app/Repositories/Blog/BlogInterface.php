@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories\Blog;
 
 interface BlogInterface
@@ -16,7 +17,7 @@ interface BlogInterface
      * @return mixed
      */
     public function all(String $search = '', Int $limit = 10, String $by = 'created_at', String $order = 'desc');
-    
+
     /**
      * Get blog detail
      *
@@ -34,14 +35,14 @@ interface BlogInterface
      * @return mixed
      */
     public function get(Int $id, String $status = '');
-    
+
     /**
      * Add blog
      * 
      * @param array $data
      * @return mixed
      */
-    public function add(Array $data);
+    public function add(array $data);
 
     /**
      * Delete blog
@@ -58,7 +59,7 @@ interface BlogInterface
      * @param int $id
      * @return mixed
      */
-    public function update(Array $data, Int $id);
+    public function update(array $data, Int $id);
     /**
      * Like or unlike blog
      *
@@ -94,7 +95,7 @@ interface BlogInterface
      * Get Total blog
      * @return Int
      */
-    public function total() : Int;
+    public function total(): Int;
 
     /**
      * Upload image
@@ -118,4 +119,6 @@ interface BlogInterface
      * @return void
      */
     public function changeImagePosition(Int $id, Int $position);
+
+    public function getAll(Int $limit = 10, $tag_id);
 }

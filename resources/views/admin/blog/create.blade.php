@@ -1,8 +1,9 @@
 @extends('admin.template.main')
 @section('title', 'Add New Blog')
 @section('css')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />   
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />   
     {{-- <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"> --}}
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 @endsection
 @section('content')
 <div class="container px-6 mx-auto grid">
@@ -55,7 +56,7 @@
             <small class="text-xs text-gray-600 dark:text-green-700 italic">{{ $message }}</small>
           @enderror
         </label>
-        <div class="grid grid-cols-2 gap-6 mt-3">
+        <div class="grid grid-cols-3 gap-6 mt-3">
           <div>
             <label for="formFileMultiple" class="form-label text-gray-700 dark:text-gray-400">Photos</label>
             <input name="photos[]" class="form-control block w-full px-3 py-1.5 text-base font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 dark:border-gray-600 dark:bg-gray-700 focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-gray" type="file" id="formFileMultiple" multiple>
@@ -79,6 +80,19 @@
               <small class="text-xs text-gray-600 dark:text-green-700 italic">{{ $message }}</small>
             @enderror
           </label>
+          <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">Posted date</span>
+            <input
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              placeholder="Jane Doe"
+              name="posted_at"
+              value="{{ old('posted_at') }}"
+              id="posted_at"
+            />
+            @error('posted_at')
+              <small class="text-xs text-gray-600 dark:text-green-700 italic">{{ $message }}</small>
+            @enderror
+          </label>
         </div>
         <div class="flex mt-3">
           <button class="px-4 py-2 mr-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-700 border border-transparent rounded-md active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-green" type="submit">
@@ -98,7 +112,8 @@
     {{-- <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.25.1/trumbowyg.min.js" integrity="sha512-t4CFex/T+ioTF5y0QZnCY9r5fkE8bMf9uoNH2HNSwsiTaMQMO0C9KbKPMvwWNdVaEO51nDL3pAzg4ydjWXaqbg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.25.1/ui/trumbowyg.min.css" integrity="sha512-nwpMzLYxfwDnu68Rt9PqLqgVtHkIJxEPrlu3PfTfLQKVgBAlTKDmim1JvCGNyNRtyvCx1nNIVBfYm8UZotWd4Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <!-- Initialize Quill editor -->
     <script>
         $('#select2').select2();
@@ -113,6 +128,15 @@
         });
         // Set HTML content
         $('#editor').trumbowyg('html', "{!! old('content') !!}");
-
+        $('#posted_at').daterangepicker({
+          singleDatePicker: true,
+          showDropdowns: true,
+          autoApply: true,
+          // applyButtonClasses: 'inline-block px-6 py-2.5 bg-green-700 text-white font-medium text-sm leading-tight rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out',
+          maxDate: moment().format('YYYY-MM-DD'),
+          locale: {
+            format: 'YYYY-MM-DD',
+          }
+        });
     </script>
 @endsection

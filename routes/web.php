@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\HolidayControlller;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuoteFunfactController;
@@ -38,6 +39,7 @@ Route::group(['middleware' => 'auth', 'as' => 'admin.'], function () {
     Route::group(['prefix' => 'master', 'as' => 'master.'], function () {
         Route::resource('tags', TagController::class)->except(['create', 'edit']);
     });
+    Route::resource('holiday', HolidayControlller::class)->except(['edit', 'create', 'show']);
     Route::get('/get-collection-shopify', [CollectionController::class, 'getCollectionShopify'])->name('get-collection-shopify');
     Route::get('/change-password', [ProfileController::class, 'changePassword'])->name('change-password');
     Route::post('/change-password', [ProfileController::class, 'updatePassword'])->name('change-password.update');
