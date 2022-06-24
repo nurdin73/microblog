@@ -190,8 +190,8 @@ class BlogRepository implements BlogInterface
     if ($tag_id) {
       return Blog::whereHas('tags', function (Builder $q) use ($tag_id) {
         $q->where('tags.id', $tag_id);
-      })->with('tags', 'photos')->take($limit)->get();
+      })->with('tags', 'photos')->take($limit)->orderBy('posted_at', 'desc')->get();
     }
-    return Blog::take($limit)->with('tags', 'photos')->get();
+    return Blog::take($limit)->with('tags', 'photos')->orderBy('posted_at', 'desc')->get();
   }
 }
