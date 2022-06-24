@@ -85,7 +85,7 @@
               <button type="button" class="inline-block px-3 py-1 bg-green-700 text-white font-medium text-sm leading-tight rounded-md shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out" data-bs-toggle="modal" data-bs-target="#exampleModalCenteredScrollable{{ $h->id }}">
                 Edit
               </button>
-              @include('admin.holiday.modal', ['method' => 'put', 'typeModal' => "exampleModalCenteredScrollable$h->id", 'url' => route('admin.holiday.update', $h->id), 'title' => $h->title, 'startDate' => \Carbon\Carbon::parse($h->start_date)->format('Y-m-d'), 'endDate' => $h->end_date ? \Carbon\Carbon::parse($h->end_date)->format('Y-m-d') : '', 'status' => $h->status])
+              @include('admin.holiday.modal', ['method' => 'put', 'titleModal' => 'Update Holiday', 'typeModal' => "exampleModalCenteredScrollable$h->id", 'url' => route('admin.holiday.update', $h->id), 'title' => $h->title, 'startDate' => \Carbon\Carbon::parse($h->start_date)->format('Y-m-d'), 'endDate' => $h->end_date ? \Carbon\Carbon::parse($h->end_date)->format('Y-m-d') : '', 'status' => $h->status])
               <form action="{{ route('admin.holiday.destroy', $h->id) }}" method="post" class="deleteItem">
                 @csrf
                 @method('delete')
@@ -120,7 +120,7 @@
 
 
 @section('modal')
-  @include('admin.holiday.modal', ['typeModal' => 'exampleModalCenteredScrollable', 'method' => 'post', 'url' => route('admin.holiday.store'), 'title' => '', 'startDate' => '', 'endDate' => '', 'status' => '']);
+  @include('admin.holiday.modal', ['typeModal' => 'exampleModalCenteredScrollable', 'titleModal' => 'Add Holiday', 'method' => 'post', 'url' => route('admin.holiday.store'), 'title' => '', 'startDate' => '', 'endDate' => '', 'status' => '']);
 @endsection
 
 
