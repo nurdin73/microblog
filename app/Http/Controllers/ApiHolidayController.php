@@ -16,7 +16,7 @@ class ApiHolidayController extends Controller
 
     public function __invoke()
     {
-        $limit = request()->limit;
+        $limit = request()->limit ?? '';
         $result = $this->holidayRepository->all($limit);
         return response(['holiday' => HolidayResource::collection($result)]);
     }

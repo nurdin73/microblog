@@ -52,9 +52,9 @@ class HolidayRepository implements HolidayInterface
         return $this->holidays->findOrFail($id);
     }
 
-    public function all($limit = null)
+    public function all($limit = '')
     {
-        if ($limit) {
+        if ($limit != '') {
             return $this->holidays->take($limit)->get();
         }
         return $this->holidays->get();
