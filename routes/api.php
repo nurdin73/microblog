@@ -109,12 +109,3 @@ Route::group(['middleware' => 'api_token'], function () {
 
     Route::get('/holidays', ApiHolidayController::class);
 });
-
-Route::get('tes', function () {
-    $key = 'nakedpress';
-    $payload = [
-        'name' => 'nakedpress-token',
-    ];
-
-    return JWT::encode($payload, $key, 'HS256');
-});

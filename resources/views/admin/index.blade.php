@@ -1,5 +1,10 @@
 @extends('admin.template.main')
 @section('title', 'Dashboard')
+
+@section('css')
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css">
+@endsection
+
 @section('content')
   <div class="container px-6 mx-auto grid">
     @if (session('status'))
@@ -65,9 +70,30 @@
         </div>
       </div>
     </div>
-    <div class="p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+    {{--  <div class="p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
       <h2 class="font-bold">API Token</h2>
       <code class="break-words text-xs">{{ $api_token }}</code>
+    </div>  --}}
+    <div class="p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+      <h2 class="font-bold mb-3">Holidays</h2>
+      <div id='calendar'></div>
     </div>
   </div>    
+@endsection
+
+
+@section('js')
+  <script src="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.11.0,npm/fullcalendar@5.11.0/locales-all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/locales-all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: {!! $holidays !!}
+      });
+      calendar.render();
+    });
+  </script>
 @endsection
