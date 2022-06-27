@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Log;
@@ -32,7 +33,8 @@ trait Shopify
     return $response;
   }
 
-  public function req($url) {
+  public function req($url)
+  {
     $apiKey = config('shopify.api_key');
     $accessToken = config('shopify.access_token');
     $storeName = config('shopify.store_name');
@@ -54,7 +56,7 @@ trait Shopify
   public function getAllCustomer()
   {
     $typeApi = config('shopify.type_api');
-    if($typeApi == 'admin_api') {
+    if ($typeApi == 'admin_api') {
       $url = 'customers.json';
       try {
         return $this->req($url)->customers;
@@ -73,7 +75,7 @@ trait Shopify
   public function getCustomer($id)
   {
     $typeApi = config('shopify.type_api');
-    if($typeApi == 'admin_api') {
+    if ($typeApi == 'admin_api') {
       $url = "customers/$id.json";
       try {
         return $this->req($url)->customer->id;
@@ -89,10 +91,10 @@ trait Shopify
         }
       ";
       $response = $this->getWithGraphQl($query);
-      if(isset($response['errors'])) {
+      if (isset($response['errors'])) {
         return false;
       } else {
-        if($response['data']['customer'] != null) {
+        if ($response['data']['customer'] != null) {
           $customerId = explode('/', $response['data']['customer']['id']);
           return $customerId[count($customerId) - 1];
         } else {
@@ -105,7 +107,7 @@ trait Shopify
   public function getAllCollections($searchQuery = '', $limit = 10)
   {
     $typeApi = config('shopify.type_api');
-    if($typeApi == 'admin_api') {
+    if ($typeApi == 'admin_api') {
       $url = "custom_collections.json";
       try {
         return $this->req($url)->custom_collections;
@@ -130,10 +132,10 @@ trait Shopify
           }
         }";
       $response = $this->getWithGraphQl($query);
-      if(isset($response['errors'])) {
+      if (isset($response['errors'])) {
         return false;
       } else {
-        if($response['data']['collections']['nodes'] != null) {
+        if ($response['data']['collections']['nodes'] != null) {
           return $response['data']['collections']['nodes'];
         } else {
           return false;
@@ -145,7 +147,7 @@ trait Shopify
   public function getCollection($id)
   {
     $typeApi = config('shopify.type_api');
-    if($typeApi == 'admin_api') {
+    if ($typeApi == 'admin_api') {
       $url = "custom_collections/$id.json";
       try {
         return $this->req($url)->custom_collection;
@@ -160,6 +162,38 @@ trait Shopify
             title,
           }
         }";
+      $response = $this->getWithGraphQl($query);
+      return $response;
+    }
+  }
+
+  public function getArticles($filter)
+  {
+    $typeApi = config('shopify.type_api');
+    if ($typeApi == 'admin_api') {
+      $url = "blogs/" . $filter['blog_id'] . '/articles/' . $filter['article_id'];
+      try {
+        return $this->req($url);
+      } catch (\Exception $e) {
+        return false;
+      }
+    } else {
+      $query = "
+        query {
+          articles(first: 10,  query:\"{$filter}\") {
+            nodes {
+              id,
+              title,
+              image {
+                id,
+                url,
+              },
+              content,
+              publishedAt
+            }
+          }
+        }
+      ";
       $response = $this->getWithGraphQl($query);
       return $response;
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiArticleController;
 use App\Http\Controllers\ApiBlogController;
 use App\Http\Controllers\ApiHolidayController;
 use App\Http\Controllers\ApiProfileController;
@@ -96,12 +97,18 @@ Route::group(['middleware' => 'api_token'], function () {
         Route::get('/tag/{id}', [ApiBlogController::class, 'getByTag']);
         Route::get('/detail/{id}', [ApiBlogController::class, 'detail']);
         Route::post('/like-dislike', [ApiBlogController::class, 'likeUnlike']);
+        Route::get('/{user_id}/liked', [ApiBlogController::class, 'getBlogLikedByUser']);
     });
 
-    Route::group(['prefix' => 'profile'], function () {
-        Route::get('/', [ApiProfileController::class, 'get']);
-        Route::put('/', [ApiProfileController::class, 'updateOrCreate']);
+    Route::group(['prefix' => 'articles'], function () {
+        Route::post('/liked', [ApiArticleController::class, 'likeArticle']);
+        Route::get('/{user_id}/liked', [ApiArticleController::class, 'getAllLikedArticlesByUser']);
     });
+
+    // Route::group(['prefix' => 'profile'], function () {
+    //     Route::get('/', [ApiProfileController::class, 'get']);
+    //     Route::put('/', [ApiProfileController::class, 'updateOrCreate']);
+    // });
 
     Route::get('/quote-funfacts', [QuoteFunfactController::class, 'getRandomQuotesFunfacts']);
 

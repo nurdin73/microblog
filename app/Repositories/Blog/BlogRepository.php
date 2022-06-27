@@ -194,4 +194,24 @@ class BlogRepository implements BlogInterface
     }
     return Blog::take($limit)->with('tags', 'photos')->orderBy('posted_at', 'desc')->get();
   }
+
+  public function getBlogLikedByUser($id)
+  {
+    $search = request()->search ?? '';
+    $limit = request()->limit ?? 10;
+    $orderBy = request()->orderBy ?? 'posted_at';
+    $sortBy = request()->sortBy ?? 'desc';
+    $type = config('shopify.type_api');
+    $checkCustomer = $this->getCustomer($id);
+    if (!$checkCustomer) return false;
+    $customerId = $type == 'storefront_api' ? $checkCustomer : $id;
+    $results = Blog::whereHas('likes', function (Builder $q) use ($customerId) {
+      return $q->where('customer_id', $customerId)->where('status', 1);
+    });
+    if ($search != '') {
+      $results = $results->where('title', 'like', "%$search%");
+    }
+    $results = $results->orderBy($orderBy, $sortBy)->paginate($limit);
+    return $results;
+  }
 }

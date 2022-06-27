@@ -84,7 +84,7 @@
           <span class="ml-4">Micro Blog</span>
         </a>
       </li>
-      <li class="relative px-6 py-3">
+      {{--  <li class="relative px-6 py-3">
         <a
           class="@if($route == 'admin.quote-funfacts.index') text-gray-800 dark:text-gray-100 @endif inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
           href="{{ route('admin.quote-funfacts.index') }}"
@@ -94,7 +94,7 @@
           </svg>
           <span class="ml-4">Blog Link</span>
         </a>
-      </li>
+      </li>  --}}
       <li class="relative px-6 py-3">
         <a
           class="@if($route == 'admin.collections.index') text-gray-800 dark:text-gray-100 @endif inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"

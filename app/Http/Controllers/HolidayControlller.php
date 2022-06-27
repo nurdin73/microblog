@@ -48,7 +48,7 @@ class HolidayControlller extends Controller
         $data = $this->validate($request, [
             'title' => 'required',
             'start_date' => 'required|date',
-            'status' => 'required|in:LIBUR,CUTI'
+            // 'status' => 'required|in:LIBUR,CUTI'
         ]);
         $data['end_date'] = $request->input('end_date');
         $this->holidayRepository->store($data);
@@ -67,7 +67,7 @@ class HolidayControlller extends Controller
         $data = $this->validate($request, [
             'title' => 'required',
             'start_date' => 'required|date',
-            'status' => 'required|in:LIBUR,CUTI'
+            // 'status' => 'required|in:LIBUR,CUTI'
         ]);
         $data['end_date'] = $request->input('end_date');
         $this->holidayRepository->update($data, $id);

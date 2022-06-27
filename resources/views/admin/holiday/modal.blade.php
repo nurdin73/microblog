@@ -17,7 +17,7 @@
             <span class="text-gray-700 dark:text-gray-400 text-left">Title</span>
             <input
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              placeholder="Jane Doe"
+              placeholder="Libur lebaran"
               name="title"
               value="{{ old('title') ?? $title }}"
             />
@@ -42,7 +42,7 @@
               type="text"
             />
           </label>
-          <label class="flex justify-start flex-col text-sm mb-2">
+          {{--  <label class="flex justify-start flex-col text-sm mb-2">
             <span class="text-gray-700 dark:text-gray-400 text-left">Status</span>
             <select
               class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:focus:shadow-outline-gray"
@@ -54,7 +54,7 @@
               <option value="LIBUR" @if(old('status') == 'LIBUR' || $status == 'LIBUR') selected @endif>Libur</option>
               <option value="CUTI" @if(old('status') == 'CUTI' || $status == 'CUTI') selected @endif>Cuti</option>
             </select>
-          </label>
+          </label>  --}}
         </div>
         <div class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 dark:border-gray-800 rounded-b-md">
           <button type="button"

@@ -20,7 +20,7 @@ class HolidayResource extends JsonResource
             'title' => $this->title,
             'start_date' => Carbon::parse($this->start_date)->format('Y-m-d H:s'),
             'end_date' => $this->whenNotNull($this->end_date ? Carbon::parse($this->end_date)->format('Y-m-d H:s') : null),
-            'status' => $this->status,
+            // 'status' => $this->status,
         ];
     }
 }

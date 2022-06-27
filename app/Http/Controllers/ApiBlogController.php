@@ -69,4 +69,13 @@ class ApiBlogController extends Controller
             'message' => $sync
         ]);
     }
+
+    public function getBlogLikedByUser($user_id)
+    {
+        if ($results = $this->blogRepository->getBlogLikedByUser($user_id)) {
+            return new BlogCollection($results);
+        }
+
+        return response(['message' => "error feching data"], 500);
+    }
 }
