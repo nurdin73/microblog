@@ -6,6 +6,7 @@ use App\Http\Controllers\HolidayControlller;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuoteFunfactController;
+use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,7 @@ Route::group(['middleware' => 'auth', 'as' => 'admin.'], function () {
         Route::resource('tags', TagController::class)->except(['create', 'edit']);
     });
     Route::resource('holiday', HolidayControlller::class)->except(['edit', 'create', 'show']);
+    Route::get('surveys', SurveyController::class)->name('surveys');
     Route::get('/get-collection-shopify', [CollectionController::class, 'getCollectionShopify'])->name('get-collection-shopify');
     Route::get('/change-password', [ProfileController::class, 'changePassword'])->name('change-password');
     Route::post('/change-password', [ProfileController::class, 'updatePassword'])->name('change-password.update');

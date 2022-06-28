@@ -45,4 +45,13 @@ class SurveyRepository
     {
         return $this->survey->where('account_id', $account_id)->with('answers')->orderBy('created_at', 'DESC')->latest()->first();
     }
+
+    public function paginate($search = '')
+    {
+        $results = $this->answer->select('answer', DB::raw("count(*) as total_answer"));
+        if ($search != '') {
+            $results = $results->where('answer', 'like', "%$search%");
+        }
+        return $results->groupBy('answer')->paginate(10);
+    }
 }
