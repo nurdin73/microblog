@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::table('profiles', function (Blueprint $table) {
             $table->dropColumn('weight');
             $table->dropColumn('height');
-            $table->date('birthDate');
+            $table->date('birthDate')->nullable();
             $table->enum('gender', ['L', 'P'])->default(null);
             $table->timestamp('latestSurveyDate')->nullable();
         });
