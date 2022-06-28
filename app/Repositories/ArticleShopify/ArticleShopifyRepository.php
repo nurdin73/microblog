@@ -28,8 +28,7 @@ class ArticleShopifyRepository implements ArticleShopifyInterface
             throw new Exception($checkArticle['errors'][0]['message']);
         }
         $article = $checkArticle['data']['articles']['nodes'][0];
-        $articleId = explode('/', $article['id']);
-        $articleId = $type == 'storefront_api' ? $articleId[4] : $data['article_id'];
+        $articleId = $type == 'storefront_api' ? $article['id'] : $data['article_id'];
         $data = [
             'article_id' => $articleId,
             'account_id' => $customer_id
