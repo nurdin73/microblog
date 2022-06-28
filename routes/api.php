@@ -6,7 +6,9 @@ use App\Http\Controllers\ApiHolidayController;
 use App\Http\Controllers\ApiProfileController;
 use App\Http\Controllers\ApiSurveyController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\PreferenceController;
 use App\Http\Controllers\QuoteFunfactController;
+use App\Http\Controllers\TagController;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Support\Facades\Route;
@@ -23,72 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return response([
-        'message' => 'Welcome to the API. this is base url for api',
-        'status' => 'success',
-        'version' => '1.0.0',
-        'endpoint' => [
-            [
-                'title' => 'Blogs',
-                'url' => url('api/blogs'),
-                'method' => 'GET',
-                'body' => null,
-                'params' => null,
-                'query' => [
-                    'search' => 'string',
-                    'limit' => 'integer',
-                    'by' => 'string',
-                    'order' => 'string',
-                    'aditional' => 'string',
-                    'page' => 'integer'
-                ],
-            ],
-            [
-                'title' => 'Blog Detail',
-                'url' => url('api/blogs/:id'),
-                'method' => 'GET',
-                'body' => null,
-                'params' => [
-                    'id' => 'integer',
-                ],
-                'query' => [
-                    'customer_id' => 'integer',
-                ],
-            ],
-            [
-                'title' => 'Like/Unlike Blog',
-                'url' => url('api/blogs/like-dislike'),
-                'method' => 'POST',
-                'body' => [
-                    'blog_id' => 'integer',
-                    'customer_id' => 'integer',
-                ],
-                'params' => null,
-                'query' => null,
-            ],
-            [
-                'title' => 'Quotes/Funfacts',
-                'url' => url('api/quote-funfacts'),
-                'method' => 'GET',
-                'body' => null,
-                'params' => null,
-                'query' => [
-                    'limit' => 'integer',
-                ],
-            ],
-            [
-                'title' => 'Collections',
-                'url' => url('api/collections'),
-                'method' => 'GET',
-                'body' => null,
-                'params' => null,
-                'query' => [
-                    'search' => 'string',
-                    'limit' => 'integer',
-                ],
-            ]
-        ]
-    ]);
+    return response(['message' => "Welcome to nakedpress api"]);
 });
 Route::group(['middleware' => 'api_token'], function () {
     Route::group(['prefix' => 'blogs'], function () {
@@ -121,6 +58,10 @@ Route::group(['middleware' => 'api_token'], function () {
     Route::get('/quote-funfacts', [QuoteFunfactController::class, 'getRandomQuotesFunfacts']);
 
     Route::get('/collections', [CollectionController::class, 'collections']);
+
+    Route::get('/preferences', [PreferenceController::class, 'preferences']);
+
+    Route::get('/tags', [TagController::class, 'tags']);
 
     Route::get('/holidays', ApiHolidayController::class);
 });

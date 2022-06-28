@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TagResource;
 use App\Repositories\Tag\TagRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -89,5 +90,12 @@ class TagController extends Controller
     {
         $delete = $this->tagRepository->delete($id);
         return redirect()->route('admin.master.tags.index')->with('success', 'Tag berhasil dihapus');
+    }
+
+    public function tags()
+    {
+        $search = request()->search ?? '';
+        $all = $this->tagRepository->all($search);
+        return TagResource::collection($all);
     }
 }
