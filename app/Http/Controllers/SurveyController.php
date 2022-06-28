@@ -18,6 +18,7 @@ class SurveyController extends Controller
     {
         $search = $request->search ?? '';
         $data['surveys'] = $this->surveyRepository->paginate($search);
+        $data['search'] = $search;
         return view('admin.surveys.index', $data);
     }
 }
