@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class ArticleResource extends JsonResource
 {
@@ -14,6 +15,14 @@ class ArticleResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        // return parent::toArray($request);
+        return [
+            'article_liked_id' => $this->article_liked_id,
+            'title' => $this->title,
+            'article_shopify_id' => $this->whenLoaded('articleLike', $this->articleLike->article_id),
+            'image' => $this->image,
+            'content' => Str::limit($this->content, 200),
+            'created_at' => $this->created_at->format('d F Y'),
+        ];
     }
 }

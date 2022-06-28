@@ -67,7 +67,7 @@ class ArticleShopifyRepository implements ArticleShopifyInterface
         $customerId = $type == 'storefront_api' ? $checkCustomer : $user_id;
         $results = ArticleShopifyDetail::whereHas('articleLike', function (Builder $q) use ($customerId) {
             return $q->where('account_id', $customerId)->where('status', true);
-        });
+        })->with('articleLike');
         if ($search != '') {
             $results = $results->where('title', 'like', "%$search%");
         }
