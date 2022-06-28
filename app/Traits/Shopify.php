@@ -96,7 +96,7 @@ trait Shopify
       } else {
         if ($response['data']['customer'] != null) {
           $customerId = explode('/', $response['data']['customer']['id']);
-          return $customerId[count($customerId) - 1];
+          return $response['data']['customer']['id'];
         } else {
           return false;
         }

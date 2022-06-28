@@ -16,12 +16,11 @@ class ApiArticleController extends Controller
 
     public function likeArticle(Request $request)
     {
-        $data = $this->validate($request, [
+        $this->validate($request, [
             'title' => 'required|string',
-            'account_id' => 'required|string',
+            'access_token_user' => 'required|string',
         ]);
-        $data['article_id'] = $request->article_id;
-        $data['blog_id'] = $request->blog_id;
+        $data = $request->only(['title', 'article_id', 'blog_id', 'access_token_user']);
         try {
             $send = $this->articleShopifyRepository->likedArticle($data);
             $title = $send['data']->title;
@@ -32,9 +31,21 @@ class ApiArticleController extends Controller
         }
     }
 
-    public function getAllLikedArticlesByUser($user_id)
+    public function getAllLikedArticlesByUser($access_token_use)
     {
-        $results = $this->articleShopifyRepository->getArticleLikedByUser($user_id);
+        $results = $this->articleShopifyRepository->getArticleLikedByUser($access_token_use);
         return ArticleResource::collection($results);
+    }
+
+    public function getStatusLike(Request $request)
+    {
+        $data = $this->validate($request, [
+            'article_id' => 'required',
+            'access_token_user' => 'required',
+        ]);
+        $result = $this->articleShopifyRepository->getLikedArticle($data['article_id'], $data['access_token_user']);
+        return response([
+            'liked' => $result
+        ]);
     }
 }

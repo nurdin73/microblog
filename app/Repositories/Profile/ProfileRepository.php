@@ -3,6 +3,7 @@
 namespace App\Repositories\Profile;
 
 use App\Models\Profile;
+use App\Models\ProfilePreference;
 use App\Models\User;
 
 class ProfileRepository implements ProfileInterface
@@ -29,7 +30,7 @@ class ProfileRepository implements ProfileInterface
 
     public function getProfile($id)
     {
-        return Profile::select('id', 'account_id', 'name', 'weight', 'height')->where('account_id', $id)->first();
+        return Profile::with('preferences', 'latestSurvey')->where('account_id', $id)->first();
     }
 
     public function updateProfile(array $data)
@@ -37,5 +38,13 @@ class ProfileRepository implements ProfileInterface
         return Profile::updateOrCreate([
             'account_id' => $data['account_id']
         ], $data);
+    }
+
+    public function syncPreference($profile_id, $preverence_id)
+    {
+        return ProfilePreference::updateOrCreate([
+            'profile_id' => $profile_id,
+            'preference_id' => $preverence_id
+        ]);
     }
 }

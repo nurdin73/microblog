@@ -8,5 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Profile extends Model
 {
     use HasFactory;
-    protected $fillable = ['account_id', 'weight', 'height', 'name'];
+    protected $fillable = ['account_id', 'name', 'birthDate', 'gender', 'latestSurveyDate'];
+
+    public function preferences()
+    {
+        return $this->hasManyThrough(Preferences::class, ProfilePreference::class, 'profile_id', 'id', 'id', 'preference_id');
+    }
+
+    public function surveys()
+    {
+        return $this->hasMany(Survey::class, 'account_id', 'account_id');
+    }
+
+    public function latestSurvey()
+    {
+        return $this->hasOne(Survey::class, 'account_id', 'account_id')->latestOfMany('created_at');
+    }
 }

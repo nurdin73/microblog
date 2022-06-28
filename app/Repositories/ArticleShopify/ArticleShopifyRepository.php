@@ -20,9 +20,9 @@ class ArticleShopifyRepository implements ArticleShopifyInterface
     public function likedArticle($data)
     {
         $type = config('shopify.type_api');
-        $checkCustomer = $this->getCustomer($data['account_id']);
+        $checkCustomer = $this->getCustomer($data['access_token_user']);
         if (!$checkCustomer) return false;
-        $customer_id = $type == 'storefront_api' ? $checkCustomer : $data['account_id'];
+        $customer_id = $type == 'storefront_api' ? $checkCustomer : $data['access_token_user'];
         $checkArticle = $this->getArticles($data['title']);
         if (isset($checkArticle['errors'])) {
             throw new Exception($checkArticle['errors'][0]['message']);
@@ -73,5 +73,16 @@ class ArticleShopifyRepository implements ArticleShopifyInterface
         }
         $results = $results->orderBy($orderBy, $sortBy)->paginate($limit);
         return $results;
+    }
+
+    public function getLikedArticle($article_id, $user_id)
+    {
+        $type = config('shopify.type_api');
+        $checkCustomer = $this->getCustomer($user_id);
+        if (!$checkCustomer) return false;
+        $customerId = $type == 'storefront_api' ? $checkCustomer : $user_id;
+        $checkData = $this->articleLikeShopify->where('article_id', $article_id)->where('account_id', $customerId)->where('status', true)->first();
+        if (!$checkData) return false;
+        return true;
     }
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\ApiArticleController;
 use App\Http\Controllers\ApiBlogController;
 use App\Http\Controllers\ApiHolidayController;
 use App\Http\Controllers\ApiProfileController;
+use App\Http\Controllers\ApiSurveyController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\QuoteFunfactController;
 use Firebase\JWT\JWT;
@@ -103,12 +104,19 @@ Route::group(['middleware' => 'api_token'], function () {
     Route::group(['prefix' => 'articles'], function () {
         Route::post('/liked', [ApiArticleController::class, 'likeArticle']);
         Route::get('/{user_id}/liked', [ApiArticleController::class, 'getAllLikedArticlesByUser']);
+        Route::get('/has-liked', [ApiArticleController::class, 'getStatusLike']);
     });
 
-    // Route::group(['prefix' => 'profile'], function () {
-    //     Route::get('/', [ApiProfileController::class, 'get']);
-    //     Route::put('/', [ApiProfileController::class, 'updateOrCreate']);
-    // });
+    Route::group(['prefix' => 'profile'], function () {
+        Route::get('/', [ApiProfileController::class, 'get']);
+        Route::put('/', [ApiProfileController::class, 'updateOrCreate']);
+    });
+
+    Route::group(['prefix' => 'survey'], function () {
+        Route::post('/store', [ApiSurveyController::class, 'store']);
+        Route::get('/me', [ApiSurveyController::class, 'show']);
+        Route::get('/latest', [ApiSurveyController::class, 'latest']);
+    });
 
     Route::get('/quote-funfacts', [QuoteFunfactController::class, 'getRandomQuotesFunfacts']);
 
