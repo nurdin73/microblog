@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\SurveyResource;
 use App\Repositories\Survey\SurveyRepository;
 use App\Traits\Shopify;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ApiSurveyController extends Controller
@@ -34,6 +35,13 @@ class ApiSurveyController extends Controller
             $checkCustomer = $this->getCustomer($accessToken);
             if (!$checkCustomer) return response(['message' => "Account customer id not found"], 404);
             $data['account_id'] = $type == 'storefront_api' ? $checkCustomer : $accessToken;
+            $latestSurvey = $this->surveyRepository->latest($data['account_id']);
+            if ($latestSurvey) {
+                $lastSurvey = Carbon::parse($latestSurvey->created_at)->diffInMonths();
+                if ($lastSurvey < 3) {
+                    return response(['message' => "Survey cannot set. please wait for 3 month later."], 422);
+                }
+            }
             $this->surveyRepository->store($data);
             return response(['message' => "Survey success added"]);
         } catch (\Exception $e) {
