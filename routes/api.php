@@ -53,6 +53,7 @@ Route::group(['middleware' => 'api_token'], function () {
         Route::post('/store', [ApiSurveyController::class, 'store']);
         Route::get('/me', [ApiSurveyController::class, 'show']);
         Route::get('/latest', [ApiSurveyController::class, 'latest']);
+        Route::get('/has-grant', [ApiSurveyController::class, 'grant']);
     });
 
     Route::get('/quote-funfacts', [QuoteFunfactController::class, 'getRandomQuotesFunfacts']);

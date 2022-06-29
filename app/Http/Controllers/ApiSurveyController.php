@@ -76,4 +76,25 @@ class ApiSurveyController extends Controller
         $result = $this->surveyRepository->latest($accountId);
         return new SurveyResource($result);
     }
+
+    public function grant(Request $request)
+    {
+        $this->validate($request, [
+            'access_token_user' => 'required'
+        ]);
+        $accessToken = $request->access_token_user;
+        $type = config('shopify.type_api');
+        $checkCustomer = $this->getCustomer($accessToken);
+        if (!$checkCustomer) return response(['message' => "Account customer id not found"], 404);
+        $accountId = $type == 'storefront_api' ? $checkCustomer : $accessToken;
+        $check = $this->surveyRepository->latest($accountId);
+        if ($check) {
+            if (Carbon::parse($check->created_at)->diffInMonths() < 3) {
+                return response(['grant' => false]);
+            } else {
+                return response(['grant' => true]);
+            }
+        }
+        return response(['grant' => true]);
+    }
 }
