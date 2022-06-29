@@ -50,6 +50,7 @@ class ApiProfileController extends Controller
         DB::beginTransaction();
         try {
             $send = $this->profileRepository->updateProfile($data);
+            $this->profileRepository->deletePreferences($send->id);
             foreach ($preferences as $preverence) {
                 $this->profileRepository->syncPreference($send->id, $preverence);
             }

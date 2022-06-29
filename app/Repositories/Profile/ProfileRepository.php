@@ -47,4 +47,9 @@ class ProfileRepository implements ProfileInterface
             'preference_id' => $preverence_id
         ]);
     }
+
+    public function deletePreferences($profile_id)
+    {
+        return ProfilePreference::where('profile_id', $profile_id)->delete();
+    }
 }
