@@ -18,7 +18,6 @@ class ProfileResource extends JsonResource
         // return parent::toArray($request);
         return [
             'account_id' => $this->account_id,
-            'name' => $this->name,
             'birthDate' => Carbon::parse($this->birthDate)->format('d F Y'),
             'age' => Carbon::parse($this->birthDate)->diffInYears(),
             'gender' => $this->gender,

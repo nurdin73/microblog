@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Profile extends Model
 {
     use HasFactory;
-    protected $fillable = ['account_id', 'name', 'birthDate', 'gender', 'latestSurveyDate'];
+    protected $fillable = ['account_id', 'birthDate', 'gender', 'latestSurveyDate'];
 
     public function preferences()
     {

@@ -39,7 +39,6 @@ class ApiProfileController extends Controller
             'birthDate' => 'required|date',
             'gender' => 'required|in:L,P',
             'access_token_user' => 'required',
-            'name' => 'required',
         ]);
         $access_token_user = $request->access_token_user;
         $preferences = $request->preferences ?? [];
