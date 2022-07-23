@@ -74,6 +74,9 @@ class QuoteFunfactRepository implements QuoteFunfactInterface
 
   public function total(String $type = 'quote'): Int
   {
+    if($type == 'all') {
+      return $this->quote_funfact->count();
+    }
     return $this->quote_funfact->where('type', $type)->count();
   }
 }

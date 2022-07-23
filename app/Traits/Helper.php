@@ -1,8 +1,13 @@
 <?php
+
 namespace App\Traits;
+
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
 trait Helper
 {
-    protected function dateDiffInDays(String $start_date, String $end_date) : Int
+    protected function dateDiffInDays(String $start_date, String $end_date): Int
     {
         $diff = strtotime($end_date) - strtotime($start_date);
         return abs(round($diff / 86400)) + 1;
@@ -12,7 +17,7 @@ trait Helper
     {
         $temp = [];
         foreach ($array as $key => $value) {
-            if($value['account_id'] == $filter) {
+            if ($value['account_id'] == $filter) {
                 array_push($temp, $value);
             }
         }
@@ -32,5 +37,25 @@ trait Helper
     public function deleteHtmlTag($string)
     {
         return preg_replace('/<[^>]*>/', '', $string);
+    }
+
+    public function getToken()
+    {
+        $key = 'nakedpress';
+        $payload = [
+            'name' => 'nakedpress-token',
+        ];
+
+        return JWT::encode($payload, $key, 'HS256');
+    }
+
+    public function decodeToken($token)
+    {
+        try {
+            $key = 'nakedpress';
+            return JWT::decode($token, new Key($key, 'HS256'));
+        } catch (\Exception $th) {
+            return false;
+        }
     }
 }

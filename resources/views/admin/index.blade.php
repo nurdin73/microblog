@@ -1,21 +1,26 @@
 @extends('admin.template.main')
 @section('title', 'Dashboard')
+
+@section('css')
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css">
+@endsection
+
 @section('content')
   <div class="container px-6 mx-auto grid">
     @if (session('status'))
-      <div class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
+      <div class="flex items-center justify-between p-4 mb-9 mt-3 text-sm font-semibold text-green-100 bg-green-700 rounded-lg shadow-md focus:outline-none focus:shadow-outline-green">
         <div class="flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>{{ session('status') }}</span>
+          <span class="ml-1">{{ session('status') }}</span>
         </div>
       </div>
     @endif
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
       Dashboard
     </h2>
-    <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+    <div class="grid gap-6 mb-8 md:grid-cols-3 xl:grid-cols-3">
       <!-- Card -->
       <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
         <div class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500">
@@ -36,31 +41,15 @@
       <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
         <div class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
           </svg>
         </div>
         <div>
           <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-            Total Quote
+            Total Blog Link
           </p>
           <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-            {{ number_format($quote_total) }}
-          </p>
-        </div>
-      </div>
-      <!-- Card -->
-      <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-        <div class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
-        </div>
-        <div>
-          <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-            Total Funfact
-          </p>
-          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-            {{ number_format($funfact_total) }}
+            {{ number_format($blogLinkTotal) }}
           </p>
         </div>
       </div>
@@ -81,5 +70,30 @@
         </div>
       </div>
     </div>
+    {{--  <div class="p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+      <h2 class="font-bold">API Token</h2>
+      <code class="break-words text-xs">{{ $api_token }}</code>
+    </div>  --}}
+    <div class="p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+      <h2 class="font-bold mb-3">Holidays</h2>
+      <div id='calendar'></div>
+    </div>
   </div>    
+@endsection
+
+
+@section('js')
+  <script src="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.11.0,npm/fullcalendar@5.11.0/locales-all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/locales-all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: {!! $holidays !!}
+      });
+      calendar.render();
+    });
+  </script>
 @endsection

@@ -1,9 +1,16 @@
 <?php
 
+use App\Http\Controllers\ApiArticleController;
 use App\Http\Controllers\ApiBlogController;
+use App\Http\Controllers\ApiHolidayController;
+use App\Http\Controllers\ApiProfileController;
+use App\Http\Controllers\ApiSurveyController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\PreferenceController;
 use App\Http\Controllers\QuoteFunfactController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\TagController;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,80 +23,46 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::get('/', function () {
-    return response([
-        'message' => 'Welcome to the API. this is base url for api',
-        'status' => 'success',
-        'version' => '1.0.0',
-        'endpoint' => [
-            [
-                'title' => 'Blogs',
-                'url' => url('api/blogs'),
-                'method' => 'GET',
-                'body' => null,
-                'params' => null,
-                'query' => [
-                    'search' => 'string',
-                    'limit' => 'integer',
-                    'by' => 'string',
-                    'order' => 'string',
-                    'aditional' => 'string',
-                    'page' => 'integer'
-                ],
-            ],
-            [
-                'title' => 'Blog Detail',
-                'url' => url('api/blogs/:id'),
-                'method' => 'GET',
-                'body' => null,
-                'params' => [
-                    'id' => 'integer',
-                ],
-                'query' => [
-                    'customer_id' => 'integer',
-                ],
-            ],
-            [
-                'title' => 'Like/Unlike Blog',
-                'url' => url('api/blogs/like-dislike'),
-                'method' => 'POST',
-                'body' => [
-                    'blog_id' => 'integer',
-                    'customer_id' => 'integer',
-                ],
-                'params' => null,
-                'query' => null,
-            ],
-            [
-                'title' => 'Quotes/Funfacts',
-                'url' => url('api/quote-funfacts'),
-                'method' => 'GET',
-                'body' => null,
-                'params' => null,
-                'query' => [
-                    'limit' => 'integer',
-                ],
-            ],
-            [
-                'title' => 'Collections',
-                'url' => url('api/collections'),
-                'method' => 'GET',
-                'body' => null,
-                'params' => null,
-                'query' => [
-                    'search' => 'string',
-                    'limit' => 'integer',
-                ],
-            ]
-        ]
-    ]);
+    return response(['message' => "Welcome to nakedpress api"]);
 });
-Route::group(['prefix' => 'blogs'], function() {
-    Route::get('/', [ApiBlogController::class, 'blogs']);
-    Route::get('/detail/{id}', [ApiBlogController::class, 'detail']);
-    Route::post('/like-dislike', [ApiBlogController::class, 'likeUnlike']);
+Route::group(['middleware' => 'api_token'], function () {
+    Route::group(['prefix' => 'blogs'], function () {
+        Route::get('/', [ApiBlogController::class, 'blogs']);
+        Route::get('/latest-two-post', [ApiBlogController::class, 'getlatestTwoPost']);
+        Route::get('/latest-five-post', [ApiBlogController::class, 'getlatestFivePost']);
+        Route::get('/tag/{id}', [ApiBlogController::class, 'getByTag']);
+        Route::get('/detail/{id}', [ApiBlogController::class, 'detail']);
+        Route::post('/like-dislike', [ApiBlogController::class, 'likeUnlike']);
+        Route::get('/{user_id}/liked', [ApiBlogController::class, 'getBlogLikedByUser']);
+    });
+
+    Route::group(['prefix' => 'articles'], function () {
+        Route::post('/liked', [ApiArticleController::class, 'likeArticle']);
+        Route::get('/{user_id}/liked', [ApiArticleController::class, 'getAllLikedArticlesByUser']);
+        Route::get('/has-liked', [ApiArticleController::class, 'getStatusLike']);
+    });
+
+    Route::group(['prefix' => 'profile'], function () {
+        Route::get('/', [ApiProfileController::class, 'get']);
+        Route::put('/', [ApiProfileController::class, 'updateOrCreate']);
+    });
+
+    Route::group(['prefix' => 'survey'], function () {
+        Route::post('/store', [ApiSurveyController::class, 'store']);
+        Route::get('/me', [ApiSurveyController::class, 'show']);
+        Route::get('/latest', [ApiSurveyController::class, 'latest']);
+        Route::get('/has-grant', [ApiSurveyController::class, 'grant']);
+    });
+
+    Route::get('/quote-funfacts', [QuoteFunfactController::class, 'getRandomQuotesFunfacts']);
+
+    Route::get('/collections', [CollectionController::class, 'collections']);
+
+    Route::get('/preferences', [PreferenceController::class, 'preferences']);
+
+    Route::get('/tags', [TagController::class, 'tags']);
+
+    Route::get('/holidays', ApiHolidayController::class);
 });
-
-Route::get('/quote-funfacts', [QuoteFunfactController::class, 'getRandomQuotesFunfacts']);
-
-Route::get('/collections', [CollectionController::class, 'collections']);

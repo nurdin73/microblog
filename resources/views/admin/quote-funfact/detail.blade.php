@@ -1,5 +1,5 @@
 @extends('admin.template.main')
-@section('title', 'Detail Quote Funfact')
+@section('title', 'Detail Blog link')
 @section('content')
   <div class="container px-6 mx-auto grid">
     <h2 class="mt-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
@@ -16,7 +16,7 @@
     </h2>
     <span class="inline-block mb-6 dark:text-gray-200 text-gray-700 text-xs">Published at {{ \Carbon\Carbon::parse($qf->published_at)->format('d F Y') }}</span>
     <div class="flex justify-center flex-col">
-      <a href="{{ $qf->link }}" class="font-semibold text-purple-600 text-lg">{{ $qf->title }}</a>
+      <a href="{{ $qf->link }}" class="font-semibold text-green-700 text-lg">{{ $qf->title }}</a>
       <div class="mb-4">
         <svg
           aria-hidden="true"

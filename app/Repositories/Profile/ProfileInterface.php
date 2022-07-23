@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories\Profile;
 
 interface ProfileInterface
@@ -16,5 +17,7 @@ interface ProfileInterface
    * @param Array $data
    * @return mixed
    */
-  public function update(Int $id, Array $data);
+  public function update(Int $id, array $data);
+
+  public function getProfile($id);
 }

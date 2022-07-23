@@ -1,10 +1,10 @@
 <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
   <div
-    class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300"
+    class="container flex items-center justify-between h-full px-6 mx-auto text-green-700 dark:text-green-300"
   >
     <!-- Mobile hamburger -->
     <button
-      class="p-1 -ml-1 mr-5 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
+      class="p-1 -ml-1 mr-5 rounded-md md:hidden focus:outline-none focus:shadow-outline-green"
       @click="toggleSideMenu"
       aria-label="Menu"
     >
@@ -29,7 +29,7 @@
       <!-- Theme toggler -->
       <li class="flex">
         <button
-          class="rounded-md focus:outline-none focus:shadow-outline-purple"
+          class="rounded-md focus:outline-none focus:shadow-outline-green"
           @click="toggleTheme"
           aria-label="Toggle color mode"
         >
@@ -64,7 +64,7 @@
       <!-- Notifications menu -->
       {{-- <li class="relative">
         <button
-          class="relative align-middle rounded-md focus:outline-none focus:shadow-outline-purple"
+          class="relative align-middle rounded-md focus:outline-none focus:shadow-outline-green"
           @click="toggleNotificationsMenu"
           @keydown.escape="closeNotificationsMenu"
           aria-label="Notifications"
@@ -136,7 +136,7 @@
       <!-- Profile menu -->
       <li class="relative">
         <button
-          class="align-middle rounded-full focus:shadow-outline-purple focus:outline-none"
+          class="align-middle rounded-full focus:shadow-outline-green focus:outline-none"
           @click="toggleProfileMenu"
           @keydown.escape="closeProfileMenu"
           aria-label="Account"

@@ -37,6 +37,12 @@ class TagRepository implements TagInterface
     return $tag;
   }
 
+  public function find($by, $value)
+  {
+    $tag = $this->tag->where($by, $value)->first();
+    return $tag;
+  }
+
   public function add(Array $data)
   {
     $tag = $this->tag->updateOrCreate($data);

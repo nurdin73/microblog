@@ -16,7 +16,8 @@ class BlogController extends Controller
     protected $blogRepository;
     protected $tagRepository;
 
-    public function __construct(BlogRepository $blogRepository, TagRepository $tagRepository) {
+    public function __construct(BlogRepository $blogRepository, TagRepository $tagRepository)
+    {
         $this->blogRepository = $blogRepository;
         $this->tagRepository = $tagRepository;
     }
@@ -32,7 +33,7 @@ class BlogController extends Controller
         $limit = request()->query('limit', 10);
         $by = request()->query('by', 'created_at');
         $order = request()->query('order', 'desc');
-        $data['blogs'] = $this->blogRepository->all($search, $limit, $by, $order);
+        $data['blogs'] = $this->blogRepository->all($search, $limit, $by, $order, '', 'likes');
         $data['search'] = $search;
         $data['limit'] = $limit;
         $data['by'] = $by;
@@ -63,16 +64,17 @@ class BlogController extends Controller
             'title' => 'required',
             'content' => 'required',
             'status' => 'required',
+            'posted_at' => 'required'
         ]);
         $data['slug'] = Str::slug($data['title']);
         DB::beginTransaction();
         try {
             $blog = $this->blogRepository->add($data);
-            if($request->hasFile('photos')) {
+            if ($request->hasFile('photos')) {
                 $photos = $request->file('photos');
                 foreach ($photos as $photo) {
                     $filename = $this->saveImage($photo, 'blog/');
-                    if($filename) {
+                    if ($filename) {
                         $this->blogRepository->syncPhoto($filename, $blog->id);
                     } else {
                         DB::rollBack();
@@ -83,7 +85,7 @@ class BlogController extends Controller
                 DB::rollBack();
                 return redirect()->back()->withErrors(['photos' => 'Please upload at least one photo']);
             }
-            if($request->has('tags')) {
+            if ($request->has('tags')) {
                 $tags = $request->input('tags');
                 foreach ($tags as $tag) {
                     $this->blogRepository->syncTag($tag, $blog->id);
@@ -135,12 +137,13 @@ class BlogController extends Controller
             'title' => 'required',
             'content' => 'required',
             'status' => 'required',
+            'posted_at' => 'required'
         ]);
         $data['slug'] = Str::slug($data['title']);
         DB::beginTransaction();
         try {
             $blog = $this->blogRepository->update($data, $id);
-            if($request->has('tags')) {
+            if ($request->has('tags')) {
                 $tags = $request->input('tags');
                 foreach ($tags as $tag) {
                     $this->blogRepository->syncTag($tag, $blog->id);
@@ -175,7 +178,7 @@ class BlogController extends Controller
         ]);
         $image = $request->file('image');
         $filename = $this->saveImage($image, 'blog/');
-        if($filename) {
+        if ($filename) {
             $this->blogRepository->imageUpload($filename, $request->input('blog_id'));
             return redirect()->back()->with('success', 'Image uploaded successfully');
         } else {
@@ -186,7 +189,10 @@ class BlogController extends Controller
     public function imageDelete($id)
     {
         $this->blogRepository->deletePhoto($id);
-        return redirect()->back()->with('success', 'Image deleted successfully');
+        return response([
+            'status' => 'success',
+            'message' => 'Image deleted successfully'
+        ]);
     }
 
     public function changeImagePosition(Request $request)

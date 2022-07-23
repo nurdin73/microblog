@@ -7,6 +7,7 @@ use App\Models\BlogPhoto;
 use App\Models\BlogTag;
 use App\Traits\ImageOptimize;
 use App\Traits\Shopify;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 
 class BlogRepository implements BlogInterface
@@ -29,8 +30,8 @@ class BlogRepository implements BlogInterface
             $query->where('status', true);
           }]);
         } else {
-          if($info == 'photos') {
-            $blogs = $blogs->with(['photos' => function($q) {
+          if ($info == 'photos') {
+            $blogs = $blogs->with(['photos' => function ($q) {
               $q->orderBy('position', 'asc');
             }]);
           } else {
@@ -45,7 +46,7 @@ class BlogRepository implements BlogInterface
 
   public function get($id, $status = '')
   {
-    $blog = Blog::where('id', $id)->with(['tags', 'photos' => function($q) {
+    $blog = Blog::where('id', $id)->with(['tags', 'photos' => function ($q) {
       $q->orderBy('position', 'asc');
     }]);
     if ($status != '') {
@@ -60,11 +61,14 @@ class BlogRepository implements BlogInterface
     $blog = Blog::with(['tags', 'photos'])->withCount(['likes' => function ($query) {
       $query->where('status', true);
     }])->where('id', $id)->where('status', 'published')->first();
+    $type = config('shopify.type_api');
     if (!$blog) return false;
     if ($customer_id != '') {
-      $customer_id = explode('/', $customer_id);
-      $customer_id = $customer_id[count($customer_id) - 1];
-      $blog->setRelation('likes', $blog->likes()->where('customer_id', $customer_id)->first());
+      $checkCustomer = $this->getCustomer($customer_id);
+      if ($checkCustomer) {
+        $customer_id = $type == 'storefront_api' ? $checkCustomer : $customer_id;
+        $blog->setRelation('likes', $blog->likes()->where('customer_id', $customer_id)->first());
+      }
     }
     return $blog;
   }
@@ -117,10 +121,10 @@ class BlogRepository implements BlogInterface
     $blog = Blog::findOrFail($blog_id);
     $type = config('shopify.type_api');
     $checkCustomer = $this->getCustomer($customer_id);
-    if(!$checkCustomer) return false;
+    if (!$checkCustomer) return false;
     $check = $blog->likes()->where('customer_id', $type == 'storefront_api' ? $checkCustomer : $customer_id)->first();
     if ($check) {
-      if($check->status) {
+      if ($check->status) {
         $blog->likes()->where('customer_id', $type == 'storefront_api' ? $checkCustomer : $customer_id)->update([
           'status' => false
         ]);
@@ -142,7 +146,7 @@ class BlogRepository implements BlogInterface
     return $message;
   }
 
-  public function total() : Int
+  public function total(): Int
   {
     return Blog::count();
   }
@@ -161,8 +165,17 @@ class BlogRepository implements BlogInterface
   public function deletePhoto(Int $id)
   {
     $photo = BlogPhoto::findOrFail($id);
+    $blogId = $photo->blog_id;
     $this->deleteImage($photo->src);
     $photo->delete();
+    $restructure = BlogPhoto::where('blog_id', $blogId)->orderBy('position', 'asc')->get();
+    $i = 1;
+    foreach ($restructure as $restructure) {
+      $restructure->update([
+        'position' => $i
+      ]);
+      $i++;
+    }
   }
 
   public function changeImagePosition(Int $id, Int $position)
@@ -170,5 +183,35 @@ class BlogRepository implements BlogInterface
     $photo = BlogPhoto::findOrFail($id);
     $photo->position = $position;
     $photo->save();
+  }
+
+  public function getAll(Int $limit = 10, $tag_id = null)
+  {
+    if ($tag_id) {
+      return Blog::whereHas('tags', function (Builder $q) use ($tag_id) {
+        $q->where('tags.id', $tag_id);
+      })->with('tags', 'photos')->take($limit)->orderBy('posted_at', 'desc')->get();
+    }
+    return Blog::take($limit)->with('tags', 'photos')->orderBy('posted_at', 'desc')->get();
+  }
+
+  public function getBlogLikedByUser($id)
+  {
+    $search = request()->search ?? '';
+    $limit = request()->limit ?? 10;
+    $orderBy = request()->orderBy ?? 'posted_at';
+    $sortBy = request()->sortBy ?? 'desc';
+    $type = config('shopify.type_api');
+    $checkCustomer = $this->getCustomer($id);
+    if (!$checkCustomer) return false;
+    $customerId = $type == 'storefront_api' ? $checkCustomer : $id;
+    $results = Blog::whereHas('likes', function (Builder $q) use ($customerId) {
+      return $q->where('customer_id', $customerId)->where('status', 1);
+    });
+    if ($search != '') {
+      $results = $results->where('title', 'like', "%$search%");
+    }
+    $results = $results->orderBy($orderBy, $sortBy)->paginate($limit);
+    return $results;
   }
 }
